@@ -1,0 +1,705 @@
+digraph SDG {
+  graph [
+    fontsize = 8
+  ];
+
+  "#42 AI this=$r0" [
+    label = "#42 AI this=$r0",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "#33 AI this=$r0" [
+    label = "#33 AI this=$r0",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "CALL #3 SDG8.test1()" [
+    label = "CALL #3 SDG8.test1()",
+    fontsize = 8
+  ];
+  "#17 AI b=iy" [
+    label = "#17 AI b=iy",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "#54 FI SDG8$Int.i" [
+    label = "#54 FI SDG8$Int.i",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "CALL #28 SDG8$Int.<init>()" [
+    label = "CALL #28 SDG8$Int.<init>()",
+    fontsize = 8
+  ];
+  "#63 FI int[]" [
+    label = "#63 FI int[]",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "6:31:SDG8.inc(z)" [
+    label = "31:SDG8.inc(z)",
+    fontsize = 8
+  ];
+  "#15 AO ix=RET" [
+    label = "#15 AO ix=RET",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "47:36:$i0=$i0 + $i1" [
+    label = "36:$i0=$i0 + $i1",
+    fontsize = 8
+  ];
+  "#55 EN SDG8.inc" [
+    label = "#55 EN SDG8.inc",
+    fontsize = 8
+  ];
+  "#51 FI a" [
+    label = "#51 FI a",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "22:23:$r0=new test.cases.SDG8$Int" [
+    label = "23:$r0=new test.cases.SDG8$Int",
+    fontsize = 8
+  ];
+  "59:41:$b0=0" [
+    label = "41:$b0=0",
+    fontsize = 8
+  ];
+  "#61 FI a" [
+    label = "#61 FI a",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "60:42:return" [
+    label = "42:return",
+    fontsize = 8
+  ];
+  "26:32:return" [
+    label = "32:return",
+    fontsize = 8
+  ];
+  "#16 AI a=ix" [
+    label = "#16 AI a=ix",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "#19 AI SDG8$Int.i=..." [
+    label = "#19 AI SDG8$Int.i=...",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "25:24:ix.i=0" [
+    label = "24:ix.i=0",
+    fontsize = 8
+  ];
+  "#35 EN SDG8$Int.<init>" [
+    label = "#35 EN SDG8$Int.<init>",
+    fontsize = 8
+  ];
+  "21:25:iy.i=1" [
+    label = "25:iy.i=1",
+    fontsize = 8
+  ];
+  "37:6:this.<init>()" [
+    label = "6:this.<init>()",
+    fontsize = 8
+  ];
+  "27:22:$r0.<init>()" [
+    label = "22:$r0.<init>()",
+    fontsize = 8
+  ];
+  "#38 FI this" [
+    label = "#38 FI this",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "#5 EN SDG8.test1" [
+    label = "#5 EN SDG8.test1",
+    fontsize = 8
+  ];
+  "#50 FO RET" [
+    label = "#50 FO RET",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "57:41:a[$b0]=$i1" [
+    label = "41:a[$b0]=$i1",
+    fontsize = 8
+  ];
+  "13:27:ix=SDG8.add(ix,iy)" [
+    label = "27:ix=SDG8.add(ix,iy)",
+    fontsize = 8
+  ];
+  "36:6:return" [
+    label = "6:return",
+    fontsize = 8
+  ];
+  "49:36:$i0=a.i" [
+    label = "36:$i0=a.i",
+    fontsize = 8
+  ];
+  "44:37:return r" [
+    label = "37:return r",
+    fontsize = 8
+  ];
+  "#29 AI this=$r0" [
+    label = "#29 AI this=$r0",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "#18 AO SDG8$Int.i=..." [
+    label = "#18 AO SDG8$Int.i=...",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "40:35:$r0.<init>()" [
+    label = "35:$r0.<init>()",
+    fontsize = 8
+  ];
+  "CALL #14 SDG8.add()" [
+    label = "CALL #14 SDG8.add()",
+    fontsize = 8
+  ];
+  "CALL #32 SDG8$Int.<init>()" [
+    label = "CALL #32 SDG8$Int.<init>()",
+    fontsize = 8
+  ];
+  "24:28:$i0=ix.i" [
+    label = "28:$i0=ix.i",
+    fontsize = 8
+  ];
+  "46:35:r=$r0" [
+    label = "35:r=$r0",
+    fontsize = 8
+  ];
+  "2:18:SDG8.test1()" [
+    label = "18:SDG8.test1()",
+    fontsize = 8
+  ];
+  "#8 AI a=z" [
+    label = "#8 AI a=z",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "CALL #7 SDG8.inc()" [
+    label = "CALL #7 SDG8.inc()",
+    fontsize = 8
+  ];
+  "#52 FI b" [
+    label = "#52 FI b",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "#39 EN SDG8.add" [
+    label = "#39 EN SDG8.add",
+    fontsize = 8
+  ];
+  "#53 FO SDG8$Int.i" [
+    label = "#53 FO SDG8$Int.i",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "34:30:z=newarray (int)[2]" [
+    label = "30:z=newarray (int)[2]",
+    fontsize = 8
+  ];
+  "#4 FI args" [
+    label = "#4 FI args",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "48:35:$r0=new test.cases.SDG8$Int" [
+    label = "35:$r0=new test.cases.SDG8$Int",
+    fontsize = 8
+  ];
+  "31:23:$r0.<init>()" [
+    label = "23:$r0.<init>()",
+    fontsize = 8
+  ];
+  "20:22:ix=$r0" [
+    label = "22:ix=$r0",
+    fontsize = 8
+  ];
+  "12:28:ix.i=$i0" [
+    label = "28:ix.i=$i0",
+    fontsize = 8
+  ];
+  "58:41:$i1=a[$b0]" [
+    label = "41:$i1=a[$b0]",
+    fontsize = 8
+  ];
+  "43:36:$i1=b.i" [
+    label = "36:$i1=b.i",
+    fontsize = 8
+  ];
+  "1:19:return" [
+    label = "19:return",
+    fontsize = 8
+  ];
+  "45:36:r.i=$i0" [
+    label = "36:r.i=$i0",
+    fontsize = 8
+  ];
+  "11:22:$r0=new test.cases.SDG8$Int" [
+    label = "22:$r0=new test.cases.SDG8$Int",
+    fontsize = 8
+  ];
+  "30:28:$i0=$i0 + 1" [
+    label = "28:$i0=$i0 + 1",
+    fontsize = 8
+  ];
+  "CALL #41 SDG8$Int.<init>()" [
+    label = "CALL #41 SDG8$Int.<init>()",
+    fontsize = 8
+  ];
+  "56:41:$i1=$i1 + 1" [
+    label = "41:$i1=$i1 + 1",
+    fontsize = 8
+  ];
+  "23:23:iy=$r0" [
+    label = "23:iy=$r0",
+    fontsize = 8
+  ];
+  "#9 AO int[]=..." [
+    label = "#9 AO int[]=...",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "#10 AI int[]=..." [
+    label = "#10 AI int[]=...",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "#62 FO int[]" [
+    label = "#62 FO int[]",
+    fillcolor = gray,
+    style = filled,
+    fontsize = 8
+  ];
+  "#0 EN SDG8.main" [
+    label = "#0 EN SDG8.main",
+    fontsize = 8
+  ];
+  "#39 EN SDG8.add" -> "40:35:$r0.<init>()" [
+    style = bold
+  ];
+  "22:23:$r0=new test.cases.SDG8$Int" -> "23:23:iy=$r0" [
+    label = "$r0",
+    fontsize = 9
+  ];
+  "#5 EN SDG8.test1" -> "13:27:ix=SDG8.add(ix,iy)" [
+    style = bold
+  ];
+  "57:41:a[$b0]=$i1" -> "#62 FO int[]"
+  "#52 FI b" -> "43:36:$i1=b.i" [
+    label = b,
+    fontsize = 9
+  ];
+  "#0 EN SDG8.main" -> "#4 FI args" [
+    style = bold
+  ];
+  "#61 FI a" -> "58:41:$i1=a[$b0]" [
+    label = a,
+    fontsize = 9
+  ];
+  "#55 EN SDG8.inc" -> "#61 FI a" [
+    style = bold
+  ];
+  "CALL #28 SDG8$Int.<init>()" -> "#35 EN SDG8$Int.<init>" [
+    style = bold
+  ];
+  "#39 EN SDG8.add" -> "#52 FI b" [
+    style = bold
+  ];
+  "21:25:iy.i=1" -> "#19 AI SDG8$Int.i=..."
+  "#55 EN SDG8.inc" -> "#63 FI int[]" [
+    style = bold
+  ];
+  "#5 EN SDG8.test1" -> "26:32:return" [
+    style = bold
+  ];
+  "#55 EN SDG8.inc" -> "57:41:a[$b0]=$i1" [
+    style = bold
+  ];
+  "#29 AI this=$r0" -> "#38 FI this" [
+    label = this,
+    fontsize = 9
+  ];
+  "CALL #41 SDG8$Int.<init>()" -> "#42 AI this=$r0" [
+    style = bold
+  ];
+  "#5 EN SDG8.test1" -> "21:25:iy.i=1" [
+    style = bold
+  ];
+  "59:41:$b0=0" -> "57:41:a[$b0]=$i1" [
+    label = "$b0",
+    fontsize = 9
+  ];
+  "22:23:$r0=new test.cases.SDG8$Int" -> "#19 AI SDG8$Int.i=..."
+  "#54 FI SDG8$Int.i" -> "43:36:$i1=b.i"
+  "25:24:ix.i=0" -> "#19 AI SDG8$Int.i=..."
+  "CALL #7 SDG8.inc()" -> "#8 AI a=z" [
+    style = bold
+  ];
+  "#63 FI int[]" -> "58:41:$i1=a[$b0]"
+  "#8 AI a=z" -> "#61 FI a" [
+    label = a,
+    fontsize = 9
+  ];
+  "CALL #41 SDG8$Int.<init>()" -> "#35 EN SDG8$Int.<init>" [
+    style = bold
+  ];
+  "#42 AI this=$r0" -> "#38 FI this" [
+    label = this,
+    fontsize = 9
+  ];
+  "44:37:return r" -> "#50 FO RET"
+  "6:31:SDG8.inc(z)" -> "CALL #7 SDG8.inc()" [
+    style = bold
+  ];
+  "23:23:iy=$r0" -> "#17 AI b=iy" [
+    label = iy,
+    fontsize = 9
+  ];
+  "47:36:$i0=$i0 + $i1" -> "45:36:r.i=$i0" [
+    label = "$i0",
+    fontsize = 9
+  ];
+  "#35 EN SDG8$Int.<init>" -> "#38 FI this" [
+    style = bold
+  ];
+  "48:35:$r0=new test.cases.SDG8$Int" -> "#53 FO SDG8$Int.i"
+  "#39 EN SDG8.add" -> "44:37:return r" [
+    style = bold
+  ];
+  "#15 AO ix=RET" -> "24:28:$i0=ix.i" [
+    label = ix,
+    fontsize = 9
+  ];
+  "#5 EN SDG8.test1" -> "34:30:z=newarray (int)[2]" [
+    style = bold
+  ];
+  "46:35:r=$r0" -> "45:36:r.i=$i0" [
+    label = r,
+    fontsize = 9
+  ];
+  "#39 EN SDG8.add" -> "47:36:$i0=$i0 + $i1" [
+    style = bold
+  ];
+  "#5 EN SDG8.test1" -> "20:22:ix=$r0" [
+    style = bold
+  ];
+  "#19 AI SDG8$Int.i=..." -> "#18 AO SDG8$Int.i=..." [
+    label = "SDG8$Int.i",
+    style = dotted,
+    fontsize = 9
+  ];
+  "48:35:$r0=new test.cases.SDG8$Int" -> "46:35:r=$r0" [
+    label = "$r0",
+    fontsize = 9
+  ];
+  "#39 EN SDG8.add" -> "46:35:r=$r0" [
+    style = bold
+  ];
+  "CALL #14 SDG8.add()" -> "#18 AO SDG8$Int.i=..." [
+    style = bold
+  ];
+  "49:36:$i0=a.i" -> "47:36:$i0=$i0 + $i1" [
+    label = "$i0",
+    fontsize = 9
+  ];
+  "#39 EN SDG8.add" -> "#54 FI SDG8$Int.i" [
+    style = bold
+  ];
+  "#63 FI int[]" -> "#62 FO int[]"
+  "#5 EN SDG8.test1" -> "22:23:$r0=new test.cases.SDG8$Int" [
+    style = bold
+  ];
+  "#17 AI b=iy" -> "#18 AO SDG8$Int.i=..." [
+    label = "SDG8$Int.i",
+    style = dotted,
+    fontsize = 9
+  ];
+  "20:22:ix=$r0" -> "#16 AI a=ix" [
+    label = ix,
+    fontsize = 9
+  ];
+  "#5 EN SDG8.test1" -> "23:23:iy=$r0" [
+    style = bold
+  ];
+  "CALL #3 SDG8.test1()" -> "#5 EN SDG8.test1" [
+    style = bold
+  ];
+  "#16 AI a=ix" -> "#51 FI a" [
+    label = a,
+    fontsize = 9
+  ];
+  "#10 AI int[]=..." -> "#9 AO int[]=..." [
+    label = "int[][x]",
+    style = dotted,
+    fontsize = 9
+  ];
+  "CALL #28 SDG8$Int.<init>()" -> "#29 AI this=$r0" [
+    style = bold
+  ];
+  "11:22:$r0=new test.cases.SDG8$Int" -> "24:28:$i0=ix.i"
+  "#62 FO int[]" -> "#9 AO int[]=..." [
+    label = "int[][x]",
+    fontsize = 9
+  ];
+  "25:24:ix.i=0" -> "24:28:$i0=ix.i"
+  "CALL #7 SDG8.inc()" -> "#55 EN SDG8.inc" [
+    style = bold
+  ];
+  "11:22:$r0=new test.cases.SDG8$Int" -> "20:22:ix=$r0" [
+    label = "$r0",
+    fontsize = 9
+  ];
+  "31:23:$r0.<init>()" -> "CALL #32 SDG8$Int.<init>()" [
+    style = bold
+  ];
+  "#35 EN SDG8$Int.<init>" -> "37:6:this.<init>()" [
+    style = bold
+  ];
+  "CALL #14 SDG8.add()" -> "#16 AI a=ix" [
+    style = bold
+  ];
+  "2:18:SDG8.test1()" -> "CALL #3 SDG8.test1()" [
+    style = bold
+  ];
+  "#17 AI b=iy" -> "#52 FI b" [
+    label = b,
+    fontsize = 9
+  ];
+  "#39 EN SDG8.add" -> "48:35:$r0=new test.cases.SDG8$Int" [
+    style = bold
+  ];
+  "#55 EN SDG8.inc" -> "#62 FO int[]" [
+    style = bold
+  ];
+  "21:25:iy.i=1" -> "24:28:$i0=ix.i"
+  "34:30:z=newarray (int)[2]" -> "#10 AI int[]=..."
+  "58:41:$i1=a[$b0]" -> "56:41:$i1=$i1 + 1" [
+    label = "$i1",
+    fontsize = 9
+  ];
+  "CALL #14 SDG8.add()" -> "#17 AI b=iy" [
+    style = bold
+  ];
+  "#0 EN SDG8.main" -> "2:18:SDG8.test1()" [
+    style = bold
+  ];
+  "#54 FI SDG8$Int.i" -> "49:36:$i0=a.i"
+  "#55 EN SDG8.inc" -> "59:41:$b0=0" [
+    style = bold
+  ];
+  "CALL #32 SDG8$Int.<init>()" -> "#35 EN SDG8$Int.<init>" [
+    style = bold
+  ];
+  "#39 EN SDG8.add" -> "45:36:r.i=$i0" [
+    style = bold
+  ];
+  "#55 EN SDG8.inc" -> "56:41:$i1=$i1 + 1" [
+    style = bold
+  ];
+  "#5 EN SDG8.test1" -> "11:22:$r0=new test.cases.SDG8$Int" [
+    style = bold
+  ];
+  "56:41:$i1=$i1 + 1" -> "57:41:a[$b0]=$i1" [
+    label = "$i1",
+    fontsize = 9
+  ];
+  "22:23:$r0=new test.cases.SDG8$Int" -> "#33 AI this=$r0" [
+    label = "$r0",
+    fontsize = 9
+  ];
+  "43:36:$i1=b.i" -> "47:36:$i0=$i0 + $i1" [
+    label = "$i1",
+    fontsize = 9
+  ];
+  "23:23:iy=$r0" -> "21:25:iy.i=1" [
+    label = iy,
+    fontsize = 9
+  ];
+  "#5 EN SDG8.test1" -> "24:28:$i0=ix.i" [
+    style = bold
+  ];
+  "59:41:$b0=0" -> "58:41:$i1=a[$b0]" [
+    label = "$b0",
+    fontsize = 9
+  ];
+  "#54 FI SDG8$Int.i" -> "#53 FO SDG8$Int.i"
+  "CALL #7 SDG8.inc()" -> "#10 AI int[]=..." [
+    style = bold
+  ];
+  "#55 EN SDG8.inc" -> "60:42:return" [
+    style = bold
+  ];
+  "#33 AI this=$r0" -> "#38 FI this" [
+    label = this,
+    fontsize = 9
+  ];
+  "40:35:$r0.<init>()" -> "CALL #41 SDG8$Int.<init>()" [
+    style = bold
+  ];
+  "22:23:$r0=new test.cases.SDG8$Int" -> "24:28:$i0=ix.i"
+  "#5 EN SDG8.test1" -> "27:22:$r0.<init>()" [
+    style = bold
+  ];
+  "45:36:r.i=$i0" -> "#53 FO SDG8$Int.i"
+  "24:28:$i0=ix.i" -> "30:28:$i0=$i0 + 1" [
+    label = "$i0",
+    fontsize = 9
+  ];
+  "CALL #7 SDG8.inc()" -> "#9 AO int[]=..." [
+    style = bold
+  ];
+  "#61 FI a" -> "57:41:a[$b0]=$i1" [
+    label = a,
+    fontsize = 9
+  ];
+  "#38 FI this" -> "37:6:this.<init>()" [
+    label = this,
+    fontsize = 9
+  ];
+  "CALL #14 SDG8.add()" -> "#19 AI SDG8$Int.i=..." [
+    style = bold
+  ];
+  "#39 EN SDG8.add" -> "#50 FO RET" [
+    style = bold
+  ];
+  "#16 AI a=ix" -> "#18 AO SDG8$Int.i=..." [
+    label = "SDG8$Int.i",
+    style = dotted,
+    fontsize = 9
+  ];
+  "#5 EN SDG8.test1" -> "12:28:ix.i=$i0" [
+    style = bold
+  ];
+  "46:35:r=$r0" -> "44:37:return r" [
+    label = r,
+    fontsize = 9
+  ];
+  "48:35:$r0=new test.cases.SDG8$Int" -> "43:36:$i1=b.i"
+  "#39 EN SDG8.add" -> "#53 FO SDG8$Int.i" [
+    style = bold
+  ];
+  "#15 AO ix=RET" -> "12:28:ix.i=$i0" [
+    label = ix,
+    fontsize = 9
+  ];
+  "#51 FI a" -> "49:36:$i0=a.i" [
+    label = a,
+    fontsize = 9
+  ];
+  "#5 EN SDG8.test1" -> "6:31:SDG8.inc(z)" [
+    style = bold
+  ];
+  "#39 EN SDG8.add" -> "49:36:$i0=a.i" [
+    style = bold
+  ];
+  "#18 AO SDG8$Int.i=..." -> "24:28:$i0=ix.i"
+  "#5 EN SDG8.test1" -> "25:24:ix.i=0" [
+    style = bold
+  ];
+  "48:35:$r0=new test.cases.SDG8$Int" -> "49:36:$i0=a.i"
+  "#5 EN SDG8.test1" -> "30:28:$i0=$i0 + 1" [
+    style = bold
+  ];
+  "CALL #14 SDG8.add()" -> "#39 EN SDG8.add" [
+    style = bold
+  ];
+  "48:35:$r0=new test.cases.SDG8$Int" -> "#42 AI this=$r0" [
+    label = "$r0",
+    fontsize = 9
+  ];
+  "#39 EN SDG8.add" -> "#51 FI a" [
+    style = bold
+  ];
+  "20:22:ix=$r0" -> "25:24:ix.i=0" [
+    label = ix,
+    fontsize = 9
+  ];
+  "#5 EN SDG8.test1" -> "31:23:$r0.<init>()" [
+    style = bold
+  ];
+  "#50 FO RET" -> "#15 AO ix=RET" [
+    label = ix,
+    fontsize = 9
+  ];
+  "27:22:$r0.<init>()" -> "CALL #28 SDG8$Int.<init>()" [
+    style = bold
+  ];
+  "#8 AI a=z" -> "#9 AO int[]=..." [
+    label = "int[][x]",
+    style = dotted,
+    fontsize = 9
+  ];
+  "#19 AI SDG8$Int.i=..." -> "#54 FI SDG8$Int.i" [
+    label = "SDG8$Int.i",
+    fontsize = 9
+  ];
+  "11:22:$r0=new test.cases.SDG8$Int" -> "#19 AI SDG8$Int.i=..."
+  "CALL #32 SDG8$Int.<init>()" -> "#33 AI this=$r0" [
+    style = bold
+  ];
+  "#35 EN SDG8$Int.<init>" -> "36:6:return" [
+    style = bold
+  ];
+  "CALL #14 SDG8.add()" -> "#15 AO ix=RET" [
+    style = bold
+  ];
+  "#53 FO SDG8$Int.i" -> "#18 AO SDG8$Int.i=..." [
+    label = "SDG8$Int.i",
+    fontsize = 9
+  ];
+  "11:22:$r0=new test.cases.SDG8$Int" -> "#29 AI this=$r0" [
+    label = "$r0",
+    fontsize = 9
+  ];
+  "30:28:$i0=$i0 + 1" -> "12:28:ix.i=$i0" [
+    label = "$i0",
+    fontsize = 9
+  ];
+  "#10 AI int[]=..." -> "#63 FI int[]" [
+    label = "int[][x]",
+    fontsize = 9
+  ];
+  "13:27:ix=SDG8.add(ix,iy)" -> "CALL #14 SDG8.add()" [
+    style = bold
+  ];
+  "34:30:z=newarray (int)[2]" -> "#8 AI a=z" [
+    label = z,
+    fontsize = 9
+  ];
+  "#0 EN SDG8.main" -> "1:19:return" [
+    style = bold
+  ];
+  "#39 EN SDG8.add" -> "43:36:$i1=b.i" [
+    style = bold
+  ];
+  "#55 EN SDG8.inc" -> "58:41:$i1=a[$b0]" [
+    style = bold
+  ];
+}
