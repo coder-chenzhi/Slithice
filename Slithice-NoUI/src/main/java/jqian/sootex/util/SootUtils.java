@@ -347,7 +347,7 @@ public class SootUtils {
 	 *  Soot does not automatically do numbering for these entities.	 */
 	public static void numberClassAndFields(){
 		Scene scene = Scene.v();
-		ArrayNumberer fieldNumberer = scene.getFieldNumberer();
+		Numberer fieldNumberer = scene.getFieldNumberer();
 		int clsNum = 1;
 		
 		//Assure field numbers. SOOT only set number for fields of RefLikeType(s)
@@ -367,7 +367,7 @@ public class SootUtils {
 	
 	public static void numberLocals(){
 		//Assure local numbers
-		ArrayNumberer localNumberer = Scene.v().getLocalNumberer();
+		Numberer localNumberer = Scene.v().getLocalNumberer();
 		for(SootClass cls: Scene.v().getClasses()){				
 			for(SootMethod mthd: cls.getMethods()){
 				if(!mthd.isConcrete())
