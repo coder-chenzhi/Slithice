@@ -28,7 +28,7 @@ public class DepGraphOptions {
     
     /** choose whether to distinguish dependence reason in dependence graph construction. 
      *  Distinguishing them may result in too large PDG, but it will benefit program slicing. 
-     *  XXX: all data dependences caused by stack variables will still be distinguished
+     *  XXX: all data dependencies caused by stack variables will still be distinguished
      */
     public final boolean withDependReason(){
     	return _withDepReason; 

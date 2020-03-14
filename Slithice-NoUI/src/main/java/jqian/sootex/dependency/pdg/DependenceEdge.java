@@ -3,12 +3,12 @@ package jqian.sootex.dependency.pdg;
 
 public abstract class DependenceEdge
 {
-    //dependence edge types
+    // dependence edge types
     public static final int STACK_DEP = 0;   
     public static final int GLOBAL_DEP = 1;
     public static final int HEAP_DEP = 2;
     public static final int CTRL_DEP = 3;
-    public static final int UNDISTINGUSIHED_DATA_DEP = 4;
+    public static final int UNDISTINGUISHED_DATA_DEP = 4;
     
     private final DependenceNode _from;
     private final DependenceNode _to;    

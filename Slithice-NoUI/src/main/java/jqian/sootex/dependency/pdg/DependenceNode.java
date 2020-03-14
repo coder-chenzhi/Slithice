@@ -35,12 +35,14 @@ public abstract class DependenceNode implements Numberable{
         _count++;
         _numberer.add(this);
     }  
-    
-    /** Get object binds to this node. A Dependence node can be find out from PDG
-     *  with the given binding information.   
+
+    /**
+     * Get object binds to this node. A Dependence node can be find out from PDG
+     * with the given binding information.
      *     For JimpleStmtNode, this is a Unit.
-     *     For JavaStmtNode, this is a Integer of line. 
+     *     For JavaStmtNode, this is a Integer of line.
      *     For FormalNode and ActualNode, the binding information can be a Location or SootField, or even a Type
+     * @return
      */
     public abstract Object getBinding();
    

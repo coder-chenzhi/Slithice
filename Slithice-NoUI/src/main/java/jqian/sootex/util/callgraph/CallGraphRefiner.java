@@ -111,7 +111,7 @@ public class CallGraphRefiner{
     	
     	// ignore implicit calls
     	public boolean isEdgeIgnored(Edge edge){
-    		//XXX: We do not step into the body of a type that is considered atomic
+    		// XXX: We do not step into the body of a type that is considered atomic
     		//     Handling a call like Integer.intValue() takes a lot of time
     		SootClass cls = edge.tgt().getDeclaringClass();
             if(AtomicTypes.isAtomicType(cls))
@@ -171,7 +171,7 @@ public class CallGraphRefiner{
 	            	if(_verbose) 
 	            		Global.v().out.println(e);
 	            	
-	            	//XXX check if there are abnormal usage	            
+	            	// XXX check if there are abnormal usage
 	            	if(tgt.getName().equals("start") && !cls.getName().equals("java.lang.Thread")){
 	            		throw new RuntimeException("strange edge.");
 	            	}            		
@@ -204,10 +204,10 @@ public class CallGraphRefiner{
         for(Map.Entry<Unit,SootMethod> entry: threadCall2Method.entrySet()){
             Unit unit = entry.getKey();
             SootMethod m = entry.getValue();            
-            Collection<SootMethod> targets = resolveTargets(unit, cg);     
-            
-            //FIXME ����Щ�����߳������ķ���ҲҪ�ռ�����Ŀ�꣬Thread+.start() -> Thread.start()
-            //�����и�bug�����Һ�����Thread.start()����������࣬�������Ⲣ���Ǻ�����            
+            Collection<SootMethod> targets = resolveTargets(unit, cg);
+
+			//FIXME 对那些不是线程启动的方法也要收集调用目标，Thread+.start() -> Thread.start()
+			//这里有个bug，但幸好重载Thread.start()的情况并不多，这里问题并不是很严重
             for(SootMethod tgt: targets){           
                 Edge m2run = new Edge(m,unit,tgt,Kind.THREAD); 
                 newCg.addEdge(m2run);
@@ -227,7 +227,8 @@ public class CallGraphRefiner{
     } 
 	
 	public void refineClinits(){
-		/*//call statements and their enclosing methods, only for thread relative ones
+		/*
+		//call statements and their enclosing methods, only for thread relative ones
         Map<Unit,SootMethod> unit2Method = new HashMap(); 
         
 		CallGraph cg = Scene.v().getCallGraph();
@@ -280,7 +281,7 @@ public class CallGraphRefiner{
 	            if(kind==Kind.THREAD){
 	            	if(_verbose) PyxisGlobal.out.println(e);
 	            	
-	            	//XXX throw exception for unhandled thread usage.	            
+	            	// XXX throw exception for unhandled thread usage.
 	            	if(tgt.getName().equals("start") && !cls.getName().equals("java.lang.Thread")){
 	            		throw new RuntimeException("Unawared thread usage.");
 	            	}            		
@@ -318,7 +319,9 @@ public class CallGraphRefiner{
         
         //update call graph and reachable methods
         Scene.v().setCallGraph(newCg);
-        Scene.v().setReachableMethods(null);     */   
+        Scene.v().setReachableMethods(null);
+
+        */
     }
 	    
   
@@ -431,7 +434,7 @@ public class CallGraphRefiner{
             	
                 Type t = node.getType(); 
                 if(!(t instanceof RefType)){
-                	//XXX: Could be AnySubType
+                	// XXX: Could be AnySubType
                 	return;
                 }
                 
@@ -441,7 +444,7 @@ public class CallGraphRefiner{
                 //Check if the start() call is a real call to Thread.start(). 
                 //If not, no THREAD edge is added, and here we directly return.    
                 if(_checkStartCall){
-                	//FIXME ���ﻹ��Ҫ��һ����Thread+.start()�ıߣ���������ʱû�д���
+					//FIXME 这里还是要加一条到Thread+.start()的边，该问题暂时没有处理
                 	if(!isThreadStartCall(node,_invoke))
                        	return;
                 }

@@ -91,10 +91,14 @@ public class DependencyHelper {
     		return g.size();
     	}
     }
-	
+
+	/**
+	 * XXX if there are infinite loops, patch edges to the graph so that the algorithm can work
+	 * @param graph
+	 * @return
+	 */
 	@SuppressWarnings({"rawtypes", "unchecked" })
 	static DirectedGraph<Unit> patchCFG(DirectedGraph<Unit> graph){
-		// XXX if there are infinite loops, patch edges to the graph so that the algorithm can work
 		// StronglyConnectedComponentsFast<N> scc = new StronglyConnectedComponentsFast<N>(graph);
 		StronglyConnectedComponents scc = new StronglyConnectedComponents(graph);
 		List<List> components = scc.getComponents();
@@ -202,10 +206,10 @@ public class DependencyHelper {
 					DominatorNode commonAncestor = findCommonAncestors(postdomTree, srcNode, tgtNode);
 					
 					Collection<DominatorNode> ancestors;
-					if(commonAncestor==srcNode){
-						//Case: L = A. All nodes in the post-dominator tree on the path from A to B,
-						//including A and B, should be made control dependent on A.
-						//XXX: exclude A to avoid loop dependence
+					if(commonAncestor == srcNode){
+						// Case: L = A. All nodes in the post-dominator tree on the path from A to B,
+						// including A and B, should be made control dependent on A.
+						// XXX: exclude A to avoid loop dependence
 						ancestors = findAncestors(postdomTree, tgtNode, srcNode, false);
 						ancestors.add(tgtNode);
 					}

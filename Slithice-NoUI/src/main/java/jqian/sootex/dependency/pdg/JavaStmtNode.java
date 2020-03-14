@@ -6,7 +6,7 @@ import soot.*;
 public class JavaStmtNode extends DependenceNode {
     public JavaStmtNode(MethodOrMethodContext mc,int line){
     	super(mc);
-        this._line=line;
+        this._line = line;
     }
     
     public int getLine(){

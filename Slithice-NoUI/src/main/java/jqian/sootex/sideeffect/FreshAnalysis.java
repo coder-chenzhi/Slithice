@@ -79,9 +79,15 @@ public class FreshAnalysis implements ILocalityQuery{
 			}
 		}
 		return varConn;
-	} 
-	
+	}
 
+
+	/**
+	 * It is hard to get all fresh variables directly, because we need to check all definitions of variables
+	 * are fresh. Therefore, we choose to get all non-fresh variables, which is the the complementary problem
+	 * of our previous problem.
+	 * @param m
+	 */
 	protected void freshAnalysis(SootMethod m){
 		Set<Local> returns = new HashSet<Local>();
 		
@@ -180,8 +186,7 @@ public class FreshAnalysis implements ILocalityQuery{
 			}
 		}
 		
-		// solve constraints
-		// XXX
+		// XXX solve constraints
 		Set nonfresh = GraphHelper.getReachables(varConn, Boolean.FALSE);
 		_vnfresh[m.getNumber()] = nonfresh;
 			 

@@ -26,7 +26,7 @@ public class CallsiteNode extends JimpleStmtNode {
 		return _calleeNodes;
 	}
 	
-	// XXX: here miss callee nodes. Currently no problem, but may cause bugs in the future
+	// TODO XXX: here miss callee nodes. Currently no problem, but may cause bugs in the future
 	public Object clone(){
 		CallsiteNode node = new CallsiteNode(_mc, _stmt);
 		return node;

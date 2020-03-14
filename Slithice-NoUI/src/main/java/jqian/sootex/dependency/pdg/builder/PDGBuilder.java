@@ -47,7 +47,7 @@ public class PDGBuilder extends AbstractPDGBuilder {
     		          SDGBuilder sdgBuilder){ 
     	super(m, cfg, dgOptions, ptsTo, heapAbstraction, rd); 
     	
-    	this._sdgBuilder = sdgBuilder;   
+    	this._sdgBuilder = sdgBuilder;
     	this._bindingCollector = getBindingObjectCollector(_pdgOptions.getInterfaceLocationAbstraction());
     }  
     
@@ -251,7 +251,7 @@ public class PDGBuilder extends AbstractPDGBuilder {
     	buildFormalForHeaps();
     }
     
-    protected void buildFormalInDependences(){
+    protected void buildFormalInDependencies(){
     	DependenceNode entry = _pdg.entry();
     	
     	Collection<FormalNode> ins = _pdg.getFormalIns();
@@ -261,7 +261,7 @@ public class PDGBuilder extends AbstractPDGBuilder {
     	}
     }
     
-    protected void buildFormalOutDependences(){    	
+    protected void buildFormalOutDependencies(){
     	DependenceNode entry = _pdg.entry();
     	Collection<FormalNode> outs = _pdg.getFormalOuts();
     	

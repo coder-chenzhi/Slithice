@@ -51,17 +51,38 @@ import jqian.util.Utils;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class FastEscapeAnalysis extends FreshAnalysis {
 	// 通过栈上的传递，经由返回值漏出的变量
+	/**
+	 * 2020.2.6 Chenzhi
+	 * returned Locals of methods
+	 */
 	protected Set<Local>[] _returned;
 
 	// 从内部经throw、堆属性域、静态属性域漏出的变量
+	/**
+	 * 2020.2.6 Chenzhi
+	 * escaped Locals of methods
+	 */
 	protected Set<Local>[] _vescaped;
+	/**
+	 * 2020.2.6 Chenzhi
+	 * indicate whether any return values of method has been escaped
+	 */
 	protected boolean[] _mescaped;
 
 	public FastEscapeAnalysis(CallGraph cg) {
 		super(cg);
 	}
 
-	/** add constrains caused by dependences from out to in parameters. */
+	/**
+	 * Add constrains caused by dependencies between out to in parameters. More specifically,
+	 * there are some callee whose return value has data-dependency on its actual parameters.
+	 * Therefore, the return value of the caller has data-dependency on its formal parameters.
+	 * @param varConn
+	 * @param tgt
+	 * @param returned
+	 * @param left
+	 * @param right
+	 */
 	private void addParamInOutConstraints(MutableDirectedGraph<Object> varConn,
 			SootMethod tgt, Set<Local> returned, Value left, Value right) {
 		if (returned.isEmpty()) {
@@ -88,7 +109,11 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 		}
 	}
 
-	/** return不是只要分析ReturnStmt，获取一下被返回的Value就可以了么？为什么要分析DefinitionStmt的情况 */
+	/**
+	 * return不是只要分析ReturnStmt，获取一下被返回的Value就可以了么？为什么要分析DefinitionStmt的情况
+	 * 2020.2.5 Chenzhi we need to analyze the transitive returned value
+	 * @param m
+	 */
 	protected void returnedAnalysis(SootMethod m) {
 		// build a variable connection graph
 		MutableDirectedGraph<Object> varConn = initVarConnectionGraph(m);
@@ -107,8 +132,13 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 
 				// assignment on non-reference variables/**
 				if (!(left.getType() instanceof RefLikeType)) {
-				} 
-				else if (left instanceof Local) {
+					// do nothing
+				} else if (left instanceof Local) {
+					// Chenzhi
+					// why we don't handle those cases, such as l = r.f, l = r[], l = g,
+					// like what escape analysis and fresh analysis do
+					// Because we don't need to verify whether those locals will be returned,
+					// as those locals have escaped already. The result of isRefTgtLocal(SootMethod m, Local v) is fixed.
 					if (right instanceof Local) {
 						varConn.addEdge(left, right);
 					} else if (right instanceof CastExpr) {
@@ -116,22 +146,27 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 						Value op = cast.getOp();
 						if (op instanceof Local) {
 							varConn.addEdge(left, op);
-						}//2012.2.15 tao
-					}else if (right instanceof PhiExpr) {
+						}// 2012.2.15 tao
+					} else if (right instanceof PhiExpr) {
 						List<Value> arg=((PhiExpr) right).getValues();
 						
 						for(Value value:arg){
 							varConn.addEdge(left, value);
 						}
 						//throw new RuntimeException("PhiExpr processing has not implemented");
-					}
-					else if (right instanceof InvokeExpr) {
+					} else if (right instanceof InvokeExpr) {
 						Callees callees = new Callees(_cg, u);
 						for (SootMethod tgt : callees.explicits()) {
 							Set<Local> returned = _returned[tgt.getNumber()];
 							// if called method not analyzed (recursion), use worst assumption
+							// 2020.2.5 Chenzhi
+							// We assume left depends on all parameters of right.
+							// This branch should not happen ideally because we traverse method with
+							// topological order and the callee methods should be visited before
+							// the caller methods. However, there are some special cases ,
+							// such as recursion, will lead to this branch.
 							if (returned == null) {
-								/** 如果是static呢？有何区别 **/
+								// what if tgt is static?
 								if (!tgt.isStatic()) {
 									varConn.addEdge(left, ((InstanceInvokeExpr) right).getBase());
 								}
@@ -143,7 +178,7 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 										varConn.addEdge(left, lv);
 									}
 								}
-								break;
+								break; // break here as we use the worst case
 							} else {
 								addParamInOutConstraints(varConn, tgt,
 										returned, left, right);
@@ -167,6 +202,8 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 			int tgtId = tgt.getNumber();
 			Set<Local> escaped = _vescaped[tgtId];
 			// if callee not analyzed yet, use worst assumptions
+			// 2020.2.6 Chenzhi
+			// We assume all are escaped
 			if (escaped == null) {
 				// return value itself
 				if (left != null) {
@@ -250,8 +287,8 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 				Value left = d.getLeftOp();
 				Value right = d.getRightOp();
 
-				// assignment on non-reference variables
 				if (!(left.getType() instanceof RefLikeType)) {
+					// assignment on non-reference variables, do nothing
 				} else if (left instanceof Local) {
 					// 1. l = @param, l = @this
 					if (d instanceof IdentityStmt) {
@@ -274,6 +311,9 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 					}
 					// 5. l = r.f, l = r[], l = g
 					else if (right instanceof ConcreteRef) {
+						// 2020.2.6 Chenzhi
+						// why do nothing?
+						// Because those locals have escaped already, we don't need to track them.
 					} else if (right instanceof InvokeExpr) {
 						handleMethodCallForEscape(varConn, left, right, u);
 					}
@@ -293,6 +333,11 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 				}
 				// 6. g = r, l.f = r, l[] = r 
 				else if (left instanceof ConcreteRef) {
+					// 2020.2.6 Chenzhi
+					// Actually, instanceFieldRef may not escape, but tracking the usage of field is
+					// costly. We want to keep our escape analysis as fast as possible. Moreover,
+					// this way, assuming all field access will escape, reduces the precision of our analysis,
+					// but increases the safeness of our analysis.
 					if (right instanceof Local) {
 						varConn.addEdge(Boolean.TRUE, right);
 					}

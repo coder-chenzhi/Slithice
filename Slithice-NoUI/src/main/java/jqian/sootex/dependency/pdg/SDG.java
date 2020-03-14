@@ -262,7 +262,10 @@ public class SDG implements DependenceGraph{
     	}
     }
 	
-	/**XXX The path table based approach seems to time-consuming. A PDG may have 10000 nodes. */
+	/**
+	 * TODO XXX The path table based approach seems to time-consuming. A PDG may have 10000 nodes.
+	 *
+	 */
 	protected void findSummaryEdgeByPathTable(PDG pdg,Collection<SummaryEdge> summaries){
 		Collection<FormalNode> fIns = pdg.getFormalIns();
     	Collection<FormalNode> fOuts = pdg.getFormalOuts();

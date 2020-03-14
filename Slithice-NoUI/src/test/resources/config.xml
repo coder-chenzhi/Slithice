@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Config>
+
+<verbose>true</verbose>
+<debug>true</debug>
+
+<!-- paths for .class files -->
+<classpath>E:\IDEAWorkspace\Slithice\Slithice-NoUI\target\test-classes</classpath>
+
+<!-- entry of the application -->
+<entry_class>test.cases.SideEffect</entry_class>
+
+<jdk_path>C:\Program Files\Java\jdk1.8.0_211</jdk_path>
+
+<!-- paths for .java files -->
+<srcpath>C:\Program Files\Java\jdk1.8.0_211\src.zip</srcpath>
+
+<dot>./lib/dot/dot</dot>
+
+</Config>

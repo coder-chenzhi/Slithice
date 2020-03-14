@@ -24,8 +24,8 @@ import jqian.util.Utils;
  */
 public class DUBuilder{
 	private boolean _verbose;
-    private RDAnalysis[] _rdAnalyses;  //Reaching definition analyzer for each method
-    private RUAnalysis[] _ruAnalyses;  //Reaching use analyzer for each method  
+    private RDAnalysis[] _rdAnalyses;  // Reaching definition analyzer for each method
+    private RUAnalysis[] _ruAnalyses;  // Reaching use analyzer for each method
     private HeapAbstraction _heapAbstraction;
     
     //-------------- Temporal ------------------//
@@ -49,7 +49,9 @@ public class DUBuilder{
 		this._ruAnalyses = new RUAnalysis[methodCount];
     }
     
-    /** Using lazy building, nothing is done at all. */
+    /**
+	 * Using lazy building, nothing is done at all.
+	 */
 	public void buildAll() {
 		Date startTime = new Date();
 
@@ -64,11 +66,15 @@ public class DUBuilder{
 		Date endTime = new Date();
 		System.out.println("Test finish in " + Utils.getTimeConsumed(startTime, endTime));
 	}
-    
-    public void buildRD(SootMethod m){
+
+	/**
+	 * Build reaching definition analyzer for method m
+	 * @param m target method to build reaching definition
+	 */
+	public void buildRD(SootMethod m){
     	int id = m.getNumber();
 		RDAnalysis rdAnalysis = _rdAnalyses[id];
-		if (rdAnalysis == null) {			 
+		if (rdAnalysis == null) {
 			UnitGraph cfg = _cfgProvider.getCFG(m);
 			rdAnalysis = new RDAnalysis(m, cfg, _ptsto, _heapAbstraction, _sideEffect, _verbose);
 			rdAnalysis.build();
@@ -76,7 +82,11 @@ public class DUBuilder{
 			_rdAnalyses[m.getNumber()] = rdAnalysis;
 		}
     }
-    
+
+	/**
+	 * Build reaching use analyzer for method m
+	 * @param m target method to build reaching use
+	 */
     public void buildRU(SootMethod m){
     	int id = m.getNumber();
 		RUAnalysis ruAnalysis = _ruAnalyses[id];

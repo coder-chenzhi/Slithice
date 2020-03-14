@@ -27,6 +27,9 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
 	
 	protected ISideEffectAnalysis _sideEffect;	
 	protected FlowSet _fullSet;
+	/**
+	 * Generated DEF/USE for each <code>Unit</code>
+	 */
 	protected Map<Unit,Object> _unit2Gen;
 	private Map<Unit,FlowSet> _unit2KillSet;
 	
@@ -85,7 +88,7 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
 		initKillSet(universe);
 		universe = null;
 		
-		doAnalysis(); 
+		doAnalysis();
 		finalizeFlowSets();
 		clean();
 		
@@ -106,6 +109,11 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
 		_unit2KillSet = null; 
 	}
 
+	/**
+	 * Get the DEF/USE of <code>Unit u</code>
+	 * @param u target unit
+	 * @return
+	 */
 	public Collection<Location> getDULocations(Unit u){
 		FlowSet gen = (FlowSet)_unit2Gen.get(u);
 		if(gen==null){
@@ -121,9 +129,11 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
 	}
 	
 	
-	/** Get the location killed by a statement. */
+	/**
+	 * Get the location killed by a statement.
+	 */
 	protected AccessPath getKilledAccessPath(Unit u){
-		if(u==CFGEntry.v() || u==CFGExit.v() ||
+		if(u == CFGEntry.v() || u == CFGExit.v() ||
 		   u instanceof IdentityStmt || !(u instanceof Stmt))
 			return null;
 				
@@ -137,8 +147,7 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
 			AccessPath def = AccessPath.valueToAccessPath(null, s, defValue);
 			return def;
 		}
-		 
-		 
+
 		return null;
 	}
 	
@@ -150,7 +159,7 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
 			_unit2KillSet.put(stmt,killedSet);	
 			
 			AccessPath killedAp = getKilledAccessPath(stmt);			
-			if(killedAp==null){
+			if(killedAp == null){
 				continue;
 			}
 			
@@ -162,10 +171,12 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
 		}
 	}
 	
-	/** Get the universe reaching definition set. */
+	/**
+	 * Get the universe reaching DEF/USE set.
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected FlowUniverse<ReachingDU> collectUniverseFlowSet(){
-        //collect the def/use of each statement 
+        // collect the def/use of each statement
         _unit2Gen = new HashMap<Unit,Object>(graph.size()*2+1,0.7f); 
         
         List<ReachingDU> allDU = new ArrayList<ReachingDU>();
@@ -176,12 +187,12 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
         	_unit2Gen.put(s, duSet);
         }
         
-        //build the empty set
+        // build the empty set
         FlowUniverse<ReachingDU> universe = new ArrayFlowUniverse(allDU.toArray());
-        // XXX: new ArrayPackedSet(FlowUniverse) consume large memory, use clone() instead
+        // TODO XXX: new ArrayPackedSet(FlowUniverse) consume large memory, use clone() instead
        	_fullSet = new ArrayPackedSet(universe);
 		
-		//change the sparse representation to packed representation       
+		// change the sparse representation to packed representation
 	    for(Iterator<?> it=graph.iterator();it.hasNext();){
 	        Unit s=(Unit)it.next(); 
 	        Collection<ReachingDU> fset = (Collection<ReachingDU>)_unit2Gen.get(s);
@@ -195,25 +206,27 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
 	    return universe;
 	}
 	
-	
-	 ////////////////////// FowardFlowAnalysis ///////////////////////////
+	 ////////////////////// ForwardFlowAnalysis ///////////////////////////
 	protected FlowSet newInitialFlow() {
 		return _fullSet.clone();
 	}
 	
-    //TODO 在异常入口也可能会用这个入口初始化，目前的几个分析都有这个问题
+    // TODO 在异常入口也可能会用这个入口初始化，目前的几个分析都有这个问题
 	protected FlowSet entryInitialFlow(){		
 	    return _fullSet.clone();
 	}
- 
+
+	@Override
 	protected void merge(FlowSet in1, FlowSet in2, FlowSet out) {
 		in1.union(in2, out);
 	}
 
+	@Override
 	protected void copy(FlowSet source, FlowSet dest) {	
 		source.copy(dest);
 	}	
-	
+
+	@Override
     protected void flowThrough(FlowSet in, Unit s, FlowSet out) {
         FlowSet gen = (FlowSet)_unit2Gen.get(s);
         FlowSet kill = _unit2KillSet.get(s);		
@@ -244,15 +257,17 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
         return froms;
     }
     
-    /**Find the possible definitions to locations in collection <code>find</code>. 
-     * The result is added to 'froms' set */
+    /**
+	 * Find the possible definitions to locations in collection <code>find</code>.
+     * The result is added to 'froms' set
+	 */
     //TODO 这个地方存在比较大的性能问题, 这里应该先用Field进行初步过滤
-    private void findDUInFlowSet(Collection<Location> find,Iterator<?> flowSetIt,Set<Unit> froms){   
+    private void findDUInFlowSet(Collection<Location> find, Iterator<?> flowSetIt, Set<Unit> froms){
     	if(find.isEmpty()){
     		return;
     	}
     	
-        for(Iterator<?> it=flowSetIt;it.hasNext();){
+        for(Iterator<?> it=flowSetIt; it.hasNext(); ){
             ReachingDU rd = (ReachingDU)it.next();
             Collection<Location> duLocs = rd.getLocations();
             
@@ -284,7 +299,9 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
     }
     
 	
-    /** Collect parameter locations, including the formals, this pointer and the accessed globals. */
+    /**
+	 * Collect parameter locations, including the formals, this pointer and the accessed globals.
+	 */
 	protected Collection<Location> collectParams(){
 		Set<Location> locs = new HashSet<Location>();  
 		 

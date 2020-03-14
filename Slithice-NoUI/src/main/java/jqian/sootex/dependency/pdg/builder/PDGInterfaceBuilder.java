@@ -17,14 +17,14 @@ public class PDGInterfaceBuilder extends PDGBuilder {
     
     public void build(){
         buildFormals();
-        buildFormalInDependences();         
-        buildFormalOutDependences();  
+        buildFormalInDependencies();
+        buildFormalOutDependencies();
         clearTemporals();
     }  
   
     
     /** Assume each formal out depends on all formal in. */
-    protected void buildFormalOutDependences(){    	
+    protected void buildFormalOutDependencies(){
     	DependenceNode entry = _pdg.entry();
     	Collection<FormalNode> ins = _pdg.getFormalIns();
     	Collection<FormalNode> outs = _pdg.getFormalOuts();

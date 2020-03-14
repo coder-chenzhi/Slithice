@@ -88,7 +88,7 @@ public class SDGConstructor implements Runnable{
     	        
     		// simplify call graph, ignore method not reachable from main entry
     		// ignore implicit calls (except thread calls)
-    		CallGraph cg = Scene.v().getCallGraph();				
+    		CallGraph cg = Scene.v().getCallGraph();
     		PointsToAnalysis ptsTo = Scene.v().getPointsToAnalysis();
     		CallGraphRefiner refiner = new CallGraphRefiner(ptsTo, false);   	
     		CallGraph newCg = refiner.refine(cg, new CallGraphRefiner.AggressiveCallGraphFilter());				    

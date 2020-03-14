@@ -20,39 +20,39 @@ public class CombinedDependencyQuery implements IDependencyQuery {
 		this._forLeft = forLeft;
     }
 
-	public Collection<Unit> getCtrlDependences(SootMethod m, Unit u) {
+	public Collection<Unit> getCtrlDependencies(SootMethod m, Unit u) {
 		if(_forLeft.contains(m)){
-			return _left.getCtrlDependences(m, u);
+			return _left.getCtrlDependencies(m, u);
 		}
 		else{
-			return _right.getCtrlDependences(m, u);
+			return _right.getCtrlDependencies(m, u);
 		}
 	}
 
-	public Collection<Unit> getWRDependences(SootMethod m, Unit u) {
+	public Collection<Unit> getWRDependencies(SootMethod m, Unit u) {
 		if(_forLeft.contains(m)){
-			return _left.getWRDependences(m, u);
+			return _left.getWRDependencies(m, u);
 		}
 		else{
-			return _right.getWRDependences(m, u);
+			return _right.getWRDependencies(m, u);
 		}
 	}
 
-	public Collection<Unit> getRWDependences(SootMethod m, Unit u) {
+	public Collection<Unit> getRWDependencies(SootMethod m, Unit u) {
 		if(_forLeft.contains(m)){
-			return _left.getRWDependences(m, u);
+			return _left.getRWDependencies(m, u);
 		}
 		else{
-			return _right.getRWDependences(m, u);
+			return _right.getRWDependencies(m, u);
 		}
 	}
 
-	public Collection<Unit> getWWDependences(SootMethod m, Unit u) {
+	public Collection<Unit> getWWDependencies(SootMethod m, Unit u) {
 		if(_forLeft.contains(m)){
-			return _left.getWWDependences(m, u);
+			return _left.getWWDependencies(m, u);
 		}
 		else{
-			return _right.getWWDependences(m, u);
+			return _right.getWWDependencies(m, u);
 		}
 	}
 

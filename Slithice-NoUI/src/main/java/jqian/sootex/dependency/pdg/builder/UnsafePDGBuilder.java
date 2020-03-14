@@ -88,11 +88,11 @@ public class UnsafePDGBuilder extends AbstractPDGBuilder {
 
 
 	@Override
-	protected void buildFormalInDependences() {
+	protected void buildFormalInDependencies() {
 	}
 
 
 	@Override
-	protected void buildFormalOutDependences() {
+	protected void buildFormalOutDependencies() {
 	}
 }

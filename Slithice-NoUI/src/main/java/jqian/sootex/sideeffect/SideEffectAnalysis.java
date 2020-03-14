@@ -103,7 +103,7 @@ public class SideEffectAnalysis implements ISideEffectAnalysis{
         
         //1. get the collapse call graph, each strong connected component into a single graph node
    		DirectedGraph graph = SootUtils.getSCCGraph(cg,_entries);		
-   			
+
    		//2. topological sort
    		PseudoTopologicalOrderer pto = new PseudoTopologicalOrderer();
         List order = pto.newList(graph,true);
@@ -113,14 +113,15 @@ public class SideEffectAnalysis implements ISideEffectAnalysis{
         for(Iterator it=order.iterator();it.hasNext();){          
         	Collection node = (Collection) it.next();
         	methodNum += node.size();
+            System.out.println("Component size: " + node.size());
         	findRWGlobalsForComponent(node, cg);
         }	
         	
         //3. bottom-up phase to find read/write on instance fields
-        for(Iterator it=order.iterator();it.hasNext();){          
+        for(Iterator it=order.iterator();it.hasNext();){
         	Collection node = (Collection) it.next();
         	findRWInstFieldsForComponent(node, cg, escape);
-        }  
+        }
 		
 		//free memories
 		_entries = null;
@@ -139,7 +140,7 @@ public class SideEffectAnalysis implements ISideEffectAnalysis{
         
         //intra-procedural analysis            
         for(Iterator it = methods.iterator();it.hasNext();){
-            SootMethod m = (SootMethod)it.next();          
+            SootMethod m = (SootMethod)it.next();
             SideEffectHelper.collectRWStaticFields(m,mod,use);   
         }
         
@@ -157,7 +158,7 @@ public class SideEffectAnalysis implements ISideEffectAnalysis{
     
         for(Iterator it = methods.iterator();it.hasNext();){
             SootMethod m=(SootMethod)it.next();
-            int id = m.getNumber();                     
+            int id = m.getNumber();
             
             _method2ModGb[id] = mod;
             _method2UseGb[id] = use;
@@ -193,7 +194,7 @@ public class SideEffectAnalysis implements ISideEffectAnalysis{
             _method2ModHeaps[id] = mod;
             _method2UseHeaps[id] = use;
         }
-    }    
+    }
     
 	private void addSideEffect(IPtsToQuery ptrQuery, AccessPath ap, Set<Location> out) {
 		Set<Location> locs = PtsToHelper.getAccessedLocations(ptrQuery, _heapAbstraction, null, ap);
@@ -202,6 +203,9 @@ public class SideEffectAnalysis implements ISideEffectAnalysis{
 	
 	void collectRWInstanceFields(SootMethod m, IPtsToQuery ptsto, ILocalityQuery locality, 
 									   Set<Location> mod, Set<Location> use) {
+        if ("<java.lang.AbstractStringBuilder: void ensureCapacityInternal(int)>".equals(m.getSignature())) {
+            System.out.println("Pause");
+        }
 		Set<AccessPath> modAps = new HashSet<AccessPath>();
 		Set<AccessPath> useAps = new HashSet<AccessPath>();
 		

@@ -37,7 +37,7 @@ public class Callees{
 			if(edge.isExplicit()){
 				_explicitCallees.add(tgt);
 			}
-			else{				
+			else {
 				_implicitCallees.add(tgt);
 			}
 			

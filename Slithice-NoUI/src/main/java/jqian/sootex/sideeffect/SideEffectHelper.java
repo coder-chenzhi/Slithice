@@ -61,6 +61,11 @@ public class SideEffectHelper {
 	static void collectComponentCallees(
 			Collection<SootMethod> component, CallGraph cg,
 			Collection<SootMethod> out) {
+		if (component.size() > 100) {
+			for (SootMethod m : component) {
+				System.out.println("Large component: " + m);
+			}
+		}
 		for (SootMethod m : component) {
 			Callees callees = new Callees(cg, m);
 			Set<SootMethod> threads = callees.threads();
@@ -93,6 +98,10 @@ public class SideEffectHelper {
 
 	
 	static void collectRWAccessPaths(SootMethod m, ILocalityQuery locality, Set<AccessPath> mod, Set<AccessPath> use){
+		if ("<java.lang.AbstractStringBuilder: void ensureCapacityInternal(int)>".equals(m.getSignature())) {
+			System.out.println("Pause");
+		}
+
 		if (!m.isConcrete())
 			return;
 
@@ -100,9 +109,14 @@ public class SideEffectHelper {
 			for (ValueBox box : stmt.getDefBoxes()) {
 				Value v = box.getValue();
 				if(v instanceof InstanceFieldRef || v instanceof ArrayRef){
+					// 2020.2.6 Chenzhi
+					// In current implementation of escape analysis, if the left operator of definition statement is
+					// InstanceFieldRef or ArrayRef, the left operator always isn't local.
 					if(!isRefTgtLocal(locality, m, v)){
 						AccessPath ap = AccessPath.valueToAccessPath(m, stmt, v);
 						mod.add(ap);
+					} else { // TODO 2020.2.6 Chenzhi Check here
+						System.out.println("Test! This branch will always not be executed!");
 					}
         		}
 			}
@@ -121,6 +135,7 @@ public class SideEffectHelper {
         		}
 				else if (u instanceof AnyNewExpr) {
 					// XXX: new instructions have initialization effects
+
 					Value lhs = stmt.getDefBoxes().get(0).getValue();
 					if (locality!=null && locality.isRefTgtLocal(m, (Local)lhs)) {
 						continue;
@@ -129,6 +144,9 @@ public class SideEffectHelper {
 					AccessPath left = AccessPath.valueToAccessPath(m, stmt, lhs);
 
 					if (u instanceof NewExpr) {
+						// 2020.2.7 Chenzhi
+						// For new instructions, we taken all instance fields of created class and its ancestors
+						// as modified location
 						RefType type = (RefType) u.getType();
 						SootClass cls = type.getSootClass();
 						if (!AtomicTypes.isAtomicType(cls)) {
@@ -169,7 +187,7 @@ public class SideEffectHelper {
 					if (v instanceof StaticFieldRef) {
 						StaticFieldRef ref = (StaticFieldRef) v;
 						SootField f = ref.getField();
-						//XXX: Treat static final fields as constants
+						// XXX: Treat static final fields as constants
 						if(!f.isFinal()){
 							GlobalLocation loc = Location.getGlobalLocation(f);
 							use.add(loc);

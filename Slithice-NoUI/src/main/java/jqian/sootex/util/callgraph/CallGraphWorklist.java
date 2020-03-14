@@ -98,9 +98,9 @@ public class CallGraphWorklist {
         	
         	boolean changed = _visitor.visit(m,changeSources);
             if(changed){
-                Iterator<SootMethod> it = new Sources(_cg.edgesInto(m));
+                Iterator<Edge> it = _cg.edgesInto(m);
                 while(it.hasNext()){
-                	SootMethod caller = it.next();
+                	SootMethod caller = it.next().src();
                 	int id = caller.getNumber();
                 	
                 	//if originally reachable               	

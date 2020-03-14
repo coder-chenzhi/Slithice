@@ -18,23 +18,23 @@ public class SparkPtsToQuery implements IPtsToQuery{
     public SparkPtsToQuery(){
     	PAG _pa = (PAG)Scene.v().getPointsToAnalysis();
         int allocNum = _pa.getNumAllocNodes();
-        _alloc2obj = new InstanceObject[allocNum+1];                 
+        _alloc2obj = new InstanceObject[allocNum+1];
         _obj2alloc = new AllocNode[allocNum*2];   //maybe not enough
 
-        ArrayNumberer numberer=_pa.getAllocNodeNumberer();
+        ArrayNumberer numberer = _pa.getAllocNodeNumberer();
         //FIX 2007-06-20  "i<allocNum" => "i<=allocNum"
-        for(int i=1;i<=allocNum;i++){//0 - null pointer
-            AllocNode node=(AllocNode)numberer.get(i);                
-            InstanceObject loc= InstanceObject.makeInstObject(node);
-    	    _alloc2obj[i]=loc;
-    	    if(loc!=null){
+        for(int i=1; i<=allocNum; i++){//0 - null pointer
+            AllocNode node = (AllocNode)numberer.get(i);
+            InstanceObject loc = InstanceObject.makeInstObject(node);
+    	    _alloc2obj[i] = loc;
+    	    if(loc != null){
                 setHeapObj2NodeMap(loc,node);
     	    }
         }  
     }
     
-    private final void setHeapObj2NodeMap(final InstanceObject hObj,final AllocNode node){
-        int hId=hObj.getNumber();
+    private final void setHeapObj2NodeMap(final InstanceObject hObj, final AllocNode node){
+        int hId = hObj.getNumber();
         if(hId >= _obj2alloc.length-1){    
             int oldSz = _obj2alloc.length;
             int newSz = oldSz * 2;            
@@ -59,7 +59,7 @@ public class SparkPtsToQuery implements IPtsToQuery{
     		if(ptr instanceof StackLocation){
                 Value v = ((StackLocation)ptr).getValue();                 
                 assert(v instanceof Local); 
-                result = pa.reachingObjects((Local)v);                            
+                result = pa.reachingObjects((Local)v);
             }
             else if(ptr instanceof GlobalLocation){
                 SootField field = ((GlobalLocation)ptr).getSootField();
@@ -118,10 +118,9 @@ public class SparkPtsToQuery implements IPtsToQuery{
                     pt2Set.addAll(s);
                 }                
             }
-        }
-    	else{
+        } else {
     		PointsToSet p2St = getPointTos(ptr);
-    		if(p2St!=null)
+    		if(p2St != null)
     			pt2SetToHeapObjSet(p2St,pt2Set);
     		//else
     		//	pt2Set.add(Location.UNKNOWN);

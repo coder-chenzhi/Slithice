@@ -109,15 +109,15 @@ public class PathUtils {
 	}
 	
 	public static String getJreClasspath(String jdkRoot){
-		return jdkRoot + "/jre/lib/rt.jar;" 
-		        + jdkRoot + "/jre/lib/sunrsasign.jar;"  
-		        + jdkRoot + "/jre/lib/jsse.jar;"
-				+ jdkRoot + "/jre/lib/jce.jar;" 
-				+ jdkRoot + "/jre/lib/charsets.jar;" 
-				+ jdkRoot + "/jre/lib/ext/dnsns.jar;" 
-				+ jdkRoot + "/jre/lib/ext/ldapsec.jar;" 
-				+ jdkRoot + "/jre/lib/ext/localedata.jar;" 
-				+ jdkRoot+ "/jre/lib/ext/sunjce_provider.jar";
+		return jdkRoot + "/jre/lib/rt.jar;";
+//		        + jdkRoot + "/jre/lib/sunrsasign.jar;"
+//		        + jdkRoot + "/jre/lib/jsse.jar;"
+//				+ jdkRoot + "/jre/lib/jce.jar;"
+//				+ jdkRoot + "/jre/lib/charsets.jar;"
+//				+ jdkRoot + "/jre/lib/ext/dnsns.jar;"
+//				+ jdkRoot + "/jre/lib/ext/ldapsec.jar;"
+//				+ jdkRoot + "/jre/lib/ext/localedata.jar;"
+//				+ jdkRoot+ "/jre/lib/ext/sunjce_provider.jar";
 	}
 	
 	/** Transfer a free style string into a string that is valid as a file path. */

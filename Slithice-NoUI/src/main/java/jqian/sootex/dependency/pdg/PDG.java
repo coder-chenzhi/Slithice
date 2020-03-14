@@ -15,24 +15,60 @@ import soot.toolkits.graph.*;
 
 
 /**
- * A context-sensitive procedure dependence graph. 
+ * A context-sensitive procedure dependence graph.
+ * TODO why is context-sensitive
  * 
  * DependenceEdge(s) are shared in the DEPEND_BY set of the from node,
  * and the DEPEND_ON set of the to node. 
  */
-public class PDG implements DependenceGraph{    
-    private Collection<DependenceNode> _nodes;    
-    private Map<DependenceNode,Collection<DependenceEdge>> _edgesOut;  //edges out of each node
-    private Map<DependenceNode,Collection<DependenceEdge>> _edgesIn;   //edges into each node
-    
-    private Map<Object,DependenceNode> _obj2node;      //from binding object to node for fast access
-    private Map<Object,FormalNode> _binding2formalIn;  //from binding object to FormalIn node
-    private Map<Object,FormalNode> _binding2formalOut; //from binding object to FormalOut node
+public class PDG implements DependenceGraph{
+
+	/**
+	 * All the DependenceNode of PDG
+	 */
+    private Collection<DependenceNode> _nodes;
+	/**
+	 * edges out of each node
+	 */
+	private Map<DependenceNode,Collection<DependenceEdge>> _edgesOut;
+	/**
+	 * edges into each node
+	 */
+    private Map<DependenceNode,Collection<DependenceEdge>> _edgesIn;
+	/**
+	 * from binding object to node for fast access
+	 */
+	private Map<Object,DependenceNode> _obj2node;
+	/**
+	 * from binding object to FormalIn node
+	 */
+    private Map<Object,FormalNode> _binding2formalIn;
+	/**
+	 * from binding object to FormalOut node
+	 */
+	private Map<Object,FormalNode> _binding2formalOut;
+	/**
+	 *
+	 */
     private Map<Argument,ActualNode> _arg2actualIn;
-    private Map<Argument,ActualNode> _arg2actualOut;    
-  
-    private int _edgeCount[] = new int[5];
-    private EntryNode _entry;
+	/**
+	 *
+	 */
+	private Map<Argument,ActualNode> _arg2actualOut;
+
+	/**
+	 * count of different types of edges
+	 *     STACK_DEP = 0;
+	 *     GLOBAL_DEP = 1;
+	 *     HEAP_DEP = 2;
+	 *     CTRL_DEP = 3;
+	 *     UNDISTINGUISHED_DATA_DEP = 4;
+	 */
+	private int _edgeCount[] = new int[5];
+	/**
+	 * entry node of this PDG
+	 */
+	private EntryNode _entry;
     private MethodOrMethodContext _mc;
     
     
@@ -43,19 +79,18 @@ public class PDG implements DependenceGraph{
         _nodes =  new TreeSet<DependenceNode>(NumberableComparator.v());
         _binding2formalIn = new HashMap<Object,FormalNode>(); 
         _binding2formalOut = new HashMap<Object,FormalNode>();
-        
-        //_edgesOut = new HashMap<DependenceNode,Collection<DependenceEdge>>();     
+
+		// XXX: Use an integer based map, instead of HashMap, to save memory
+        //_edgesOut = new HashMap<DependenceNode,Collection<DependenceEdge>>();
         //_edgesIn = new HashMap<DependenceNode,Collection<DependenceEdge>>();
-        
-        //XXX: Use an integer based map to save memory
-    	_edgesOut = new NodeMap<Collection<DependenceEdge>>(_entry.getNumber());     
-        _edgesIn = new NodeMap<Collection<DependenceEdge>>(_entry.getNumber()); 
+    	_edgesOut = new NodeMap<Collection<DependenceEdge>>(_entry.getNumber());
+        _edgesIn = new NodeMap<Collection<DependenceEdge>>(_entry.getNumber());
         
         _obj2node = new HashMap<Object,DependenceNode>();
         _arg2actualIn = new HashMap<Argument,ActualNode>();
         _arg2actualOut = new HashMap<Argument,ActualNode>();  
         
-        //build the entry node
+        // build the entry node
         addNode(_entry);
     }
     
@@ -128,7 +163,9 @@ public class PDG implements DependenceGraph{
     	}
     }
 
-	/** Compact edge set representation. */
+	/**
+	 * Compact edge set representation.
+	 */
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	void finalizeEdgeSets(){    	
     	// compact edge set for non interface nodes
@@ -176,9 +213,12 @@ public class PDG implements DependenceGraph{
     	}
     }
 
-    
-    /**Adds a node to the graph.*/ 
-    public boolean addNode(DependenceNode node){
+	/**
+	 * Adds a node to the graph.
+	 * @param node
+	 * @return
+	 */
+	public boolean addNode(DependenceNode node){
     	Object binding = node.getBinding();    	
     	
     	if(node instanceof FormalIn){
@@ -193,21 +233,23 @@ public class PDG implements DependenceGraph{
     		_arg2actualIn.put(arg, (ActualIn)node);
     	}
     	else if(node instanceof ActualOut){
-    		//TODO �������̫��Ч,�ڽڵ��Ͻ���Map���������ٶȿ�һЩ
+    		//TODO 这里可能太低效,在节点上建立Map可能搜索速度快一些
     		ActualNode actual = (ActualNode)node;
     		Argument arg = new Argument(actual.getCallSite(),actual.getCallee(),binding);
     		_arg2actualOut.put(arg, (ActualOut)node);
     	}
     	else{
-    		//FIXME: Can be dangerous for CallNodes
-    		_obj2node.put(binding,node);
+    		// Coder-chenzhi 2020.3.10 could be CallNode, JavaStmtNode, JimpleStmtNode and EntryNode
+    		// FIXME: Can be dangerous for CallNodes. Different CallNode may bind to the same SootMethod
+    		_obj2node.put(binding, node);
     	}
     	
         return _nodes.add(node);
     }    
     
-    /** Determine whether this is a concrete PDG with modeling to the method body. 
-     *  Some PDG(s) only have FormalNode(s) to model the interface of the method.
+    /**
+	 * Determine whether this is a concrete PDG with modeling to the method body.
+     * Some PDG(s) only have FormalNode(s) to model the interface of the method.
      */
     public boolean containsMethodBody(){
     	return _obj2node.size()>1;
@@ -230,17 +272,29 @@ public class PDG implements DependenceGraph{
     public DependenceNode getStmtBindingNode(Object stmt){
     	return _obj2node.get(stmt);
     }
-    
-    /** Get the corresponding formal nodes of the given binding object <code>binding</code>.*/
+
+	/**
+	 * Get the corresponding formal nodes of the given binding object <code>binding</code>.
+	 * @param binding
+	 * @param isGetFormalIn if true, get FormalIn node of the given binding object, otherwise, get FormalOut node
+	 * @return
+	 */
     public FormalNode getBindingFormal(Object binding, boolean isGetFormalIn){
     	if(isGetFormalIn)
     	    return _binding2formalIn.get(binding);
     	else
     		return _binding2formalOut.get(binding);
     }
-    
-    /** Get the corresponding actual nodes of the given information.*/
-    public ActualNode getBindingActual(Unit callsite,SootMethod callee,Object loc, boolean isGetActualIn){
+
+	/**
+	 * Get the corresponding actual nodes of the given information.
+	 * @param callsite caller statement
+	 * @param callee target method
+	 * @param loc location
+	 * @param isGetActualIn if true, get ActualIn node of the given binding object, otherwise, get ActualOut node
+	 * @return
+	 */
+    public ActualNode getBindingActual(Unit callsite, SootMethod callee, Object loc, boolean isGetActualIn){
     	Argument arg = new Argument(callsite,callee,loc);
     	if(isGetActualIn) 
     		return _arg2actualIn.get(arg);    	
@@ -253,10 +307,12 @@ public class PDG implements DependenceGraph{
     }
     
     ////////////////// Edges ///////////////////
-    /**
-     * @return true if there is not such edge yet.
-     */
-    public boolean addEdge(DependenceEdge edge) {
+	/**
+	 *
+	 * @param edge
+	 * @return true if there is not such edge yet.
+	 */
+	public boolean addEdge(DependenceEdge edge) {
     	DependenceNode from = edge.getFrom();
     	DependenceNode to = edge.getTo();
     	
@@ -285,7 +341,7 @@ public class PDG implements DependenceGraph{
     			DataDependenceEdge dataEdge = (DataDependenceEdge)edge;
     			Object loc = dataEdge.getReason();
     			if(loc==null)
-    				_edgeCount[DependenceEdge.UNDISTINGUSIHED_DATA_DEP]++;
+    				_edgeCount[DependenceEdge.UNDISTINGUISHED_DATA_DEP]++;
     			else if(loc instanceof StackLocation || loc instanceof MethodRet)
     				_edgeCount[DependenceEdge.STACK_DEP]++;
     			else if(loc instanceof HeapLocation || loc instanceof SootField || loc instanceof Type)
@@ -293,7 +349,7 @@ public class PDG implements DependenceGraph{
     			else if(loc instanceof GlobalLocation)
     				_edgeCount[DependenceEdge.GLOBAL_DEP]++;
     			else 
-    				throw new RuntimeException("Stange location");
+    				throw new RuntimeException("Strange location");
     		}
     	}     	
     	
@@ -302,12 +358,18 @@ public class PDG implements DependenceGraph{
    
     public int getEdgeCount(){
         int sum=0;
-        for(int i=0;i<_edgeCount.length;i++)
+        for(int i=0; i<_edgeCount.length; i++)
         	sum += _edgeCount[i];           
         return sum;
     }
-    
-    public int getEdgeCount(int type){
+
+	/**
+	 * get the count of specific type of edge
+	 *
+	 * @param type
+	 * @return
+	 */
+	public int getEdgeCount(int type){
     	return _edgeCount[type];
     }
     
@@ -324,8 +386,8 @@ public class PDG implements DependenceGraph{
         count = pdg.getEdgeCount(DependenceEdge.STACK_DEP);
         edgeCount[DependenceEdge.STACK_DEP] += count;
         
-        count = pdg.getEdgeCount(DependenceEdge.UNDISTINGUSIHED_DATA_DEP);
-        edgeCount[DependenceEdge.UNDISTINGUSIHED_DATA_DEP] += count;
+        count = pdg.getEdgeCount(DependenceEdge.UNDISTINGUISHED_DATA_DEP);
+        edgeCount[DependenceEdge.UNDISTINGUISHED_DATA_DEP] += count;
 	}
 	
 	public static String statisticsToString(int edgeCount[]){
@@ -333,7 +395,7 @@ public class PDG implements DependenceGraph{
 		              +", stack "+edgeCount[DependenceEdge.STACK_DEP] 
 		              +", heap "+ edgeCount[DependenceEdge.HEAP_DEP]
 		              +", global "+ edgeCount[DependenceEdge.GLOBAL_DEP]
-		              +", undistinguished " + edgeCount[DependenceEdge.UNDISTINGUSIHED_DATA_DEP];
+		              +", undistinguished " + edgeCount[DependenceEdge.UNDISTINGUISHED_DATA_DEP];
 		 return ret;		                                                                    
 	}
 	
@@ -365,12 +427,12 @@ public class PDG implements DependenceGraph{
     /**
      * Change to the PDG with .java line as node. The returned dependence graph is easy for understanding,
      * but it is not supposed to be used in slicing.
-     * @param  old2NewForOutVisiables  Map old node to new node. Only the out visible dependence nodes
+     * @param  old2NewForOutVisible  Map old node to new node. Only the out visible dependence nodes
      *         such as FormalNode, ActualNode, EntryNode, and CallNode are concerned.
      *         This parameter can be null.
      */
-    public PDG toJavaStmtDepGraph(Map<DependenceNode,DependenceNode> old2NewForOutVisiables){
-        PDG depGraph = new PDG(_mc);  
+    public PDG toJavaStmtDepGraph(Map<DependenceNode,DependenceNode> old2NewForOutVisible){
+        PDG depGraph = new PDG(_mc);
         
         Map<DependenceNode,DependenceNode> old2New=new HashMap<DependenceNode,DependenceNode>(_nodes.size()*2+1,0.7f);
         Map<Integer,DependenceNode> line2Node=new HashMap<Integer,DependenceNode>();
@@ -416,15 +478,15 @@ public class PDG implements DependenceGraph{
                     depGraph.addNode(newNode);
                 }                
                 
-                if(old2NewForOutVisiables!=null){
-                	old2NewForOutVisiables.put(node, newNode);
+                if(old2NewForOutVisible!=null){
+                	old2NewForOutVisible.put(node, newNode);
                 }
             }  
             
             old2New.put(node,newNode);           
         } 
         
-        //reconstruct edge
+        // reconstruct edge
         for(DependenceNode node: _nodes){            
             Collection<DependenceEdge> outs = _edgesOut.get(node);
             if(outs==null)
@@ -560,7 +622,7 @@ public class PDG implements DependenceGraph{
 	public void getActualIns(Collection out,Unit callsite){
     	for(Map.Entry<Argument,ActualNode> entry: _arg2actualIn.entrySet()){
     		Argument arg = entry.getKey();
-    		if(arg._callsite==callsite){
+    		if(arg._callSite ==callsite){
     			out.add(entry.getValue());
     		}
     	}
@@ -570,7 +632,7 @@ public class PDG implements DependenceGraph{
     public void getActualOuts(Collection out,Unit callsite){
     	for(Map.Entry<Argument,ActualNode> entry: _arg2actualOut.entrySet()){
     		Argument arg = entry.getKey();
-    		if(arg._callsite==callsite){
+    		if(arg._callSite ==callsite){
     			out.add(entry.getValue());
     		}
     	}
@@ -581,28 +643,37 @@ public class PDG implements DependenceGraph{
     		Argument arg = entry.getKey();
     		ActualNode node = entry.getValue();
     		Object formalBinding = node.getFormalBinding();
-    		if(arg._callsite==callsite && formalBinding instanceof MethodRet){
+    		if(arg._callSite ==callsite && formalBinding instanceof MethodRet){
     			out.add(node);
     		}
     	}
     } 
     
     
-    private static final class Argument{   	
-    	final Unit _callsite;
-    	final SootMethod _callee;
-    	final Object _loc;
-    	
-    	//The argument location can be a Location or even a SootField which standing for a collection of Locations
-    	public Argument(Unit callsite,SootMethod callee,Object loc){
-    		this._callsite = callsite;
+    private static final class Argument{
+		/**
+		 * Caller statement of this argument
+		 */
+		final Unit _callSite;
+		/**
+		 * callee method of this argument
+		 */
+		final SootMethod _callee;
+		/**
+		 * Location of this argument
+		 * The argument location can be a Location or even a SootField which standing for a collection of Locations
+		 */
+		final Object _loc;
+
+    	public Argument(Unit callSite,SootMethod callee,Object loc){
+    		this._callSite = callSite;
     		this._callee = callee;
     		this._loc = loc;
     	}
     	
     	public boolean equals(Object obj){
     		Argument that = (Argument)obj;
-    		if(this._callsite==that._callsite &&
+    		if(this._callSite ==that._callSite &&
     		   this._callee==that._callee && this._loc==that._loc){
     			return true;
     		}
@@ -611,15 +682,20 @@ public class PDG implements DependenceGraph{
     	}
     	
     	public int hashCode(){
-    		int hash = 3*_callsite.hashCode()+7*_callee.getNumber();
+    		int hash = 3* _callSite.hashCode()+7*_callee.getNumber();
     		if(_loc!=null) 
     			hash += 11*_loc.hashCode();
     		return hash;
     	}
     }
-    
-    
-    static class NodeMap<N> implements Map<DependenceNode, N>{
+
+
+	/**
+	 * An memory-efficient map between DependenceNode and Value
+	 * This map is implemented based on Array. The index of DependenceNode is the number of DependenceNode.
+	 * @param <N>
+	 */
+	static class NodeMap<N> implements Map<DependenceNode, N>{
     	static final float INC_FACTOR = (float)1.6;
     	private final int initIndex;
     	private Object[] map;
@@ -630,19 +706,19 @@ public class PDG implements DependenceGraph{
     	}
 
 		public int size() {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}
 
 		public boolean isEmpty() {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}
 
 		public boolean containsKey(Object key) {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}
 
 		public boolean containsValue(Object value) {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}
 		
 		private void assureCapacity(int id){
@@ -658,6 +734,11 @@ public class PDG implements DependenceGraph{
 			}
 		}
 
+		/**
+		 * get the value for the DependenceNode
+		 * @param key a DependenceNode
+		 * @return the value
+		 */
 		@SuppressWarnings("unchecked")
 		public N get(Object key) {
 			DependenceNode n = (DependenceNode)key;
@@ -666,13 +747,19 @@ public class PDG implements DependenceGraph{
 			return (N)map[id];
 		}
 
+		/**
+		 * put value for the DependenceNode
+		 * @param key
+		 * @param value
+		 * @return return the old value for the DependenceNode, can be null
+		 */
 		@SuppressWarnings("unchecked")
 		public N put(DependenceNode key, N value) {
 			DependenceNode n = (DependenceNode)key;
 			int id = n.getNumber() - initIndex;
 			assureCapacity(id);
 			Object old = map[id];
-			map[id] = value;			 
+			map[id] = value;
 			return (N)old;
 		}
 		
@@ -681,27 +768,27 @@ public class PDG implements DependenceGraph{
 		}
 
 		public N remove(Object key) {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}
 
 		public void putAll(Map<? extends DependenceNode, ? extends N> m) {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}
 
 		public void clear() {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}
 
 		public Set<DependenceNode> keySet() {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}
 
 		public Collection<N> values() {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}
 
 		public Set<Entry<DependenceNode, N>> entrySet() {
-			throw new RuntimeException("Non supported");
+			throw new RuntimeException("Not supported");
 		}    	
     }
 }

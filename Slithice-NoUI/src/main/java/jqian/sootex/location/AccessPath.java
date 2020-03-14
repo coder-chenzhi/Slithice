@@ -45,72 +45,72 @@ public class AccessPath implements Numberable{
      * @note In this method, the null constant, string constant are represent with 
      *       HeapObject. The implicit return object also can be represented with a HeapObject 
      */   
-    public static AccessPath valueToAccessPath(SootMethod method,Unit stmt,Value value){//throws Exception{
-        AccessPath ap=null;
+    public static AccessPath valueToAccessPath(SootMethod method, Unit stmt, Value value){//throws Exception{
+        AccessPath ap = null;
         //the atoms 
-        if(value instanceof Local 
+        if (value instanceof Local
            //||value instanceof NullConstant 
            //||value instanceof StringConstant
-        		){   
+        		) {
         	Location loc = Location.valueToLocation(value);
             ap = AccessPath.getByRoot(loc);   
         }        
-        else if(value instanceof ParameterRef){
+        else if (value instanceof ParameterRef) {
             //Location loc = StackLocation.getLocation(value);          
             //ap=AccessPath.getByRoot(loc);
         	return null;
         }
         
         //handling the identity references
-        else if(value instanceof JCaughtExceptionRef               
+        else if (value instanceof JCaughtExceptionRef
                 || value instanceof ThisRef
-                || value instanceof NewExpr){     
+                || value instanceof NewExpr) {
             //Location loc = CommonHeapObject.getHeapObject(method,stmt,value);
             //ap=AccessPath.getByRoot(loc);
         	return null;
         }
         //handling the new expressions
-        else if( value instanceof NewArrayExpr 
-                || value instanceof NewMultiArrayExpr){
+        else if (value instanceof NewArrayExpr
+                || value instanceof NewMultiArrayExpr) {
             //HeapObject hobj=ArraySpace.getHeapObject(method,stmt,value);           
             //ap=AccessPath.getByRoot(hobj);
         	return null;
         }
         //handling array element references
-        else if(value instanceof ArrayRef){
+        else if (value instanceof ArrayRef) {
             //may be some problem
-            Value base=((ArrayRef)value).getBase(); 
+            Value base = ((ArrayRef)value).getBase();
             Local local = (Local)base;
-            ap=AccessPath.getByRoot(Location.valueToLocation(local));    
+            ap = AccessPath.getByRoot(Location.valueToLocation(local));
             //ap=ap.appendArrayRef(((ArrayRef)value).getIndex());
-            ap=ap.appendArrayRef(); 
+            ap = ap.appendArrayRef();
         }
         //handling instance field references
-        else if(value instanceof InstanceFieldRef){
-            Value base=((InstanceFieldRef)value).getBase(); 
+        else if (value instanceof InstanceFieldRef) {
+            Value base = ((InstanceFieldRef)value).getBase();
             Local local = (Local)base;
-            ap=AccessPath.getByRoot(Location.valueToLocation(local));            
-            ap=ap.appendFieldRef(((FieldRef)value).getField());
+            ap = AccessPath.getByRoot(Location.valueToLocation(local));
+            ap = ap.appendFieldRef(((FieldRef)value).getField());
         }
         //handling class field references
-        else if(value instanceof StaticFieldRef){
-            SootField field=((StaticFieldRef)value).getField();  
+        else if (value instanceof StaticFieldRef) {
+            SootField field = ((StaticFieldRef)value).getField();
             GlobalLocation loc = Location.getGlobalLocation(field);
-            ap=AccessPath.getByRoot(loc); 
+            ap = AccessPath.getByRoot(loc);
         }
         //handling cast expression
-        else if(value instanceof CastExpr){
-            Value base=((CastExpr)value).getOp(); 
-            if(base instanceof Local){
+        else if (value instanceof CastExpr) {
+            Value base = ((CastExpr)value).getOp();
+            if (base instanceof Local){
             	Location loc = Location.valueToLocation(base);
                 ap = AccessPath.getByRoot(loc);               
-            }else{
+            } else {
             	return null;
             }
         }
         //handling the access of array length
         //NOTE: the array length access is translated to a special instruction in .class files
-        else if(value instanceof LengthExpr){
+        else if (value instanceof LengthExpr) {
              //as it return an integer, the expression is left unhandled
         	return null;
         }
@@ -125,9 +125,9 @@ public class AccessPath implements Numberable{
      * @return
      */
     public static AccessPath getByRoot(Location root){
-        AccessPath ap= _root2AccessPath.get(root);
-        if(null==ap){
-            ap=new AccessPath(root); 
+        AccessPath ap = _root2AccessPath.get(root);
+        if(null == ap){
+            ap = new AccessPath(root);
         }
         return ap;
     }   
@@ -139,9 +139,9 @@ public class AccessPath implements Numberable{
 	private final Object[] _accessList; // accessor can be SootField/Value/UNCLEAR_INDEX
 	
 	// private List<AccessPath> _extensions = new ArrayList<AccessPath>(5);
-	// XXX: Using list to store extensions is too slow
-	// Using map will improve efficiency, but some program may fail to run due
-	// to OutOfMemoryException
+	// TODO XXX: Using list to store extensions is too slow
+	//     Using map will improve efficiency, but some program may fail to run due
+	//     to OutOfMemoryException
 	private Map<Object, AccessPath> _extensions = new HashMap<Object, AccessPath>(5);
     
     //The access path can only be build from an implcit factory
@@ -149,7 +149,7 @@ public class AccessPath implements Numberable{
         this._root = loc; 
         this._accessList = new Object[0];
         this._father = null;
-        this._id=_count;
+        this._id = _count;
         
         //register to the factory
         _root2AccessPath.put(loc,this);
@@ -177,9 +177,9 @@ public class AccessPath implements Numberable{
     public void setNumber(int id){}
     
     public final AccessPath getRootModified(final Location newRoot){
-        AccessPath ap=getByRoot(newRoot);
+        AccessPath ap = getByRoot(newRoot);
         for(Object accessor: _accessList){            
-            ap=ap.appendAccessor(accessor);
+            ap = ap.appendAccessor(accessor);
         }
         return ap;
     }
@@ -200,7 +200,7 @@ public class AccessPath implements Numberable{
         return ext; */
     	
     	AccessPath ext = _extensions.get(accessor);
-    	if(ext==null){
+    	if(ext == null){
     		ext = new AccessPath(this,accessor);
     		_extensions.put(accessor,ext);
     	}
@@ -219,24 +219,24 @@ public class AccessPath implements Numberable{
     
     /**Truncate the access path by the given length*/
     public AccessPath getTruncated(int length){
-        if(length<0){
+        if(length < 0){
             throw new RuntimeException("Truncate access path error");            
         }
         
-        AccessPath cur=this;
+        AccessPath cur = this;
         while(cur!=null && cur.length()>length){
-            cur=cur._father;
+            cur = cur._father;
         }
         return cur;
     }
     
     /**Return a sequence of ancestor access paths*/
     public List<AccessPath> getAncestors(){
-        List<AccessPath> list=new LinkedList<AccessPath>();
-        AccessPath cur=_father;
-        while(cur!=null){
+        List<AccessPath> list = new LinkedList<AccessPath>();
+        AccessPath cur = _father;
+        while(cur != null){
             list.add(0,cur);  //add to list head
-            cur=cur._father;
+            cur = cur._father;
         }
         return list;
     }
@@ -247,12 +247,12 @@ public class AccessPath implements Numberable{
     }
     
     public String toString(){
-        String str=_root.toString();
+        String str = _root.toString();
         for(Object ac: _accessList){            
             if(ac instanceof SootField){
-                str+='.'+((SootField)ac).getName();
+                str += '.'+((SootField)ac).getName();
             }else{
-                str+="[]"; 
+                str += "[]";
             }          
         }
         return str;
@@ -357,7 +357,7 @@ public class AccessPath implements Numberable{
     	return _extensions.values();
     }
     
-    /**Recusively get all extensions of the current access path*/
+    /**Recursively get all extensions of the current access path*/
     public List<AccessPath> getAllExtensions(){
         List<AccessPath> list=new LinkedList<AccessPath>();
         for(AccessPath ext: _extensions.values()){          

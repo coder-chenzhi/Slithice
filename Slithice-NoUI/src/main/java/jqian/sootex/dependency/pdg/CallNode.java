@@ -55,7 +55,7 @@ public class CallNode extends DependenceNode {
         return out;
     }
     
-    //FIXME: Dangerous binding object here. Different CallNode may bind to the same SootMethod
+    // FIXME: Dangerous binding object here. Different CallNode may bind to the same SootMethod
     public Object getBinding(){
     	return _callee;
     }

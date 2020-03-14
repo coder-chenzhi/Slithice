@@ -7,19 +7,20 @@ import soot.SootClass;
  */
 public class AtomicTypes {
 	public static String[] ATOMIC_TYPES = {
-		"java.lang.Boolean",
-		"java.lang.Byte",
-		"java.lang.Character",
-		"java.lang.Double",
-		"java.lang.Float",
-		"java.lang.Integer",
-		"java.lang.Long",
-		"java.lang.Short",
-		"java.lang.String",
-		"java.lang.Void",
-		"java.lang.Object",
-		"java.lang.Class",
-		"java.math.BigInteger"
+			"java.lang.Boolean",
+			"java.lang.Byte",
+			"java.lang.Character",
+			"java.lang.Double",
+			"java.lang.Float",
+			"java.lang.Integer",
+			"java.lang.Long",
+			"java.lang.Short",
+			"java.lang.String",
+			"java.lang.Void",
+			"java.lang.Object",
+			"java.lang.Class",
+			"java.math.BigInteger",
+			"java.lang.Throwable"
 	};
 	
 	public static boolean isAtomicType(String classname){

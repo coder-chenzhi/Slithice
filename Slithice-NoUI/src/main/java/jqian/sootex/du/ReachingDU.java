@@ -8,10 +8,13 @@ import jqian.sootex.util.SootUtils;
 import jqian.util.CollectionUtils;
 
 
+/**
+ * A wrapper class for Reaching DEF/USE
+ */
 final class ReachingDU{
-    private final Unit _stmt;                      //position    
-    private final AccessPath _ap;                  //access path
-    private final Collection<Location> _locations; //def/use memory locations
+    private final Unit _stmt;                      // position
+    private final AccessPath _ap;                  // access path
+    private final Collection<Location> _locations; // def/use memory locations
     
 	@SuppressWarnings("unchecked")
 	public ReachingDU(Unit stmt, AccessPath ap, Collection<Location> locations){

@@ -97,18 +97,23 @@ public class PtsToHelper {
 		Set pt2 = ptsto.getPointTos(null, null, ptr2);		
 		return CollectionUtils.hasInterset(pt1, pt2);		 
     } 
-	    
-    /**Get all abstract locations that may alias with 'ap' in 'stmt'*/
-	private static Set<Location> getAliasedLocations(Unit stmt,AccessPath ap,IPtsToQuery query){  
+
+	/**
+	 * Get all abstract locations that may alias with 'ap' in 'stmt'
+	 * @param stmt
+	 * @param ap
+	 * @param query
+	 * @return
+	 */
+	private static Set<Location> getAliasedLocations(Unit stmt, AccessPath ap, IPtsToQuery query){
         Set cur = new HashSet(40);
         cur.add(ap.getRoot()); 
         
         for(Object ac: ap.getAccessors()){
         	Set<InstanceObject> heaps;
-        	if(cur.size()==1){
+        	if(cur.size() == 1){
         		heaps = query.getPointTos(null, stmt, (Location)cur.iterator().next());
-        	}
-        	else{
+        	} else {
         		heaps = new HashSet<InstanceObject>(100);
         		for(Object p: cur){      
         	        Set s = query.getPointTos(null, stmt,(Location)p);
@@ -128,13 +133,15 @@ public class PtsToHelper {
 	//TODO performance
 	public static Set<Location> getAccessedLocations(IPtsToQuery ptsto, 
 			HeapAbstraction heapAbstraction, Unit stmt, AccessPath ap){
-		if(heapAbstraction==HeapAbstraction.FIELD_SENSITIVE){
+		// field-sensitive
+		if (heapAbstraction == HeapAbstraction.FIELD_SENSITIVE){
 			Set<Location> locs = PtsToHelper.getAliasedLocations(null, ap, ptsto);
 			return locs;
 		}
 		
 		Set<Location> locs = new HashSet<Location>();
-		if(heapAbstraction==HeapAbstraction.FIELD_BASED){
+		// field-based
+		if(heapAbstraction == HeapAbstraction.FIELD_BASED){
 			if(ap.withArrayElmtAccess()){
 				//locs.add(Location.getUnknownArrayElmt());
 				
@@ -157,7 +164,8 @@ public class PtsToHelper {
 				locs.add(Location.getHeapFieldLocation(f));
 			}
 		}
-		else if(heapAbstraction==HeapAbstraction.TYPE_BASED){
+		// type-based
+		else if(heapAbstraction == HeapAbstraction.TYPE_BASED){
 			/*Type rootType;
 			if(ap.withArrayElmtAccess()){
 				Type elmtType = ap.getDeclareType();
@@ -192,7 +200,7 @@ public class PtsToHelper {
 				locs.add(loc);
 			}
 		}
-		// naive, no distinguishment
+		// naive, no distinguishes, field-insensitive
 		else{	
 			Location loc = null;
 			if(ap.withArrayElmtAccess()){

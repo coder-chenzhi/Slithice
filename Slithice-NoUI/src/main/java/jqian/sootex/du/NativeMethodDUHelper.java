@@ -14,7 +14,11 @@ import soot.Value;
 
 
 /**
- *
+ * Helper class for DEF/USE analysis of native methods.
+ * The DEF/USE results of native methods are hard-coded in this class.
+ * Note that the native methods here aren't typical Java Native Method.
+ * A method is native, if this method is phantom, abstract or native, i.e. this method doesn't have a body.
+ * A method is phantom, if its body is excluded from Soot analysis or we can't find its body.
  */
 public class NativeMethodDUHelper {
 	private static NativeMethodDUHelper _instance = new NativeMethodDUHelper();
@@ -125,7 +129,7 @@ public class NativeMethodDUHelper {
 	 * void notifyAll()
 	 * void wait(long)
 	 * void registerNatives()
-	 * java.lang.Class getClass()		 * 
+	 * java.lang.Class getClass()
 	 * int hashCode()
 	 */
 	static class JavaLangObjectDU implements NativeDU{

@@ -52,8 +52,13 @@ public abstract class InstanceObject implements Numberable{
 		} 
 		
 		return obj;
-	}	
-	
+	}
+
+	/**
+	 * get InstanceObject by type, only used in type-based analysis
+	 * @param type
+	 * @return
+	 */
 	public static InstanceObject typeToObject(Type type){
 		int tId = type.getNumber();
 		InstanceObject o = _type2obj[tId];

@@ -61,16 +61,22 @@ public class RUAnalysis extends DUAnalysis{
 		 */ 
 		 
 		return entrySet;
-	} 
- 
+	}
+
+	/**
+	 * Collect (global/heap side-effect) USE for invocation statement <code>Unit invokeStmt</code>
+	 * 2020.3.12 Coder-chenzhi I guess we should use context-sensitive pointer analysis here to filter side effects
+	 * @param invokeStmt target invocation statement
+	 * @return
+	 */
 	protected Collection<ReachingDU> collectInvokeUses(Unit invokeStmt){
 		Collection<ReachingDU> ruSet = new ArrayList<ReachingDU>(); 
 	    CallGraph cg = Scene.v().getCallGraph();
-	    
-	    //for all use to global location
-	    Set<Location> useGlobals = new HashSet<Location>();  
 	    Callees callees = new Callees(cg, invokeStmt);
-	    for(SootMethod tgt: callees.all()){	    	 
+
+		// for all use to global location
+		Set<Location> useGlobals = new HashSet<Location>();
+		for(SootMethod tgt: callees.all()){
 			if (!tgt.isConcrete())
 				continue;
 			
@@ -120,26 +126,32 @@ public class RUAnalysis extends DUAnalysis{
 		}
 		
 		return ruSet; 
-	} 
-	
+	}
+
+	/**
+	 *
+	 * @param u
+	 * @param tgt
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	private Collection<Location> getNativeCallUse(Unit u, SootMethod tgt){
+	private Collection<Location> getNativeCallUse(Unit u, SootMethod tgt) {
 		InvokeExpr invoke = ((Stmt)u).getInvokeExpr();
 		Value receiver = null;
-		if(!invoke.getMethod().isStatic()){
+		if (!invoke.getMethod().isStatic()) {
 			InstanceInvokeExpr iie = (InstanceInvokeExpr)invoke;
 			receiver = iie.getBase();
 		}
 		Collection<AccessPath> use = NativeMethodDUHelper.v().getUse(tgt, receiver, invoke.getArgs());
-		if(use.size()==0){
+		if (use.size()==0) {
 			return Collections.emptyList();
 		}
-		else if(use.size()==1){
+		else if (use.size()==1){
 			AccessPath d = use.iterator().next();
 			Collection<Location> useLocs = PtsToHelper.getAccessedLocations(_pt2Query, _heapAbstraction, u, d);
 			return useLocs;
 		}
-		else{
+		else {
 			Collection<Location> locs = new HashSet<Location>();
 			for(AccessPath d: use){
 				Collection<Location> useLocs = PtsToHelper.getAccessedLocations(_pt2Query, _heapAbstraction, u, d);
@@ -148,7 +160,6 @@ public class RUAnalysis extends DUAnalysis{
 			return locs;
 		}
 	}
- 
 
 	/** Collect RU of each statement */
 	protected Collection<ReachingDU> collectStmtDU(Unit stmt){
@@ -184,8 +195,8 @@ public class RUAnalysis extends DUAnalysis{
 				Collection<ReachingDU> rds = collectInvokeUses(stmt);
 		        ruSet.addAll(rds);			    
 			}
-		} 
-		
+		}
+
 	    return ruSet;	
 	}
 }

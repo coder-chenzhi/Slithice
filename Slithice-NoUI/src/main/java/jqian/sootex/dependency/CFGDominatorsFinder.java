@@ -105,7 +105,7 @@ public class CFGDominatorsFinder<N> implements DominatorsFinder<N>
     
                 //initialize to the "neutral element" for the intersection
                 //this clone() is fast on BitSets (opposed to on HashSets)
-                // XXX: modified here, avoid unnecessary clone() and and() operation
+                // TODO XXX: modified here, avoid unnecessary clone() and and() operation
                 List<N> preds = graph.getPredsOf(o);
                 assert !preds.isEmpty();
                 
@@ -133,7 +133,7 @@ public class CFGDominatorsFinder<N> implements DominatorsFinder<N>
         } while(changed);
         
         ///////////////////////////////////////////////////////////////////////////////
-        //XXX check whether there are infinite loops
+        // XXX check whether there are infinite loops
         modifiedNodes.addAll(heads);
         containInfiniteLoops = false;
         List<N> tails = graph.getTails();
@@ -186,7 +186,7 @@ public class CFGDominatorsFinder<N> implements DominatorsFinder<N>
             return null;
 
 	// could be memoised, I guess
-        // XXX: improve efficiency
+        // TODO XXX: improve efficiency
         @SuppressWarnings("unchecked")
 		List<N> preds = graph.getPredsOf((N)node);
         if(preds.size()==1){

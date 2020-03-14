@@ -135,7 +135,7 @@ public class PtsToAdapter {
 	}
 	
 	public Numberer getObjectNumberable(){
-		ArrayNumberer numberer = null;
+		Numberer numberer = null;
 		if(_pta instanceof PAG){
 			PAG pag = (PAG)_pta;
 			numberer = pag.getAllocNodeNumberer();

@@ -60,9 +60,11 @@ public abstract class AbstractPDGBuilder {
         
         buildDataDependence(stmts); 
         clearTemporals();
-    }  
-   
-	//collect statements for dependence graph construction
+    }
+
+    /**
+     *  collect statements for dependence graph construction
+     */
     protected Collection<Unit> collectStmts(){
     	// XXX: only build dependences for nodes in the CFG
     	// Collection<Unit> stmts = _method.getActiveBody().getUnits();         
@@ -81,8 +83,11 @@ public abstract class AbstractPDGBuilder {
         
         return stmts;
     }
-    
-    /**Collect the dependence graph nodes for each statement */
+
+    /**
+     * Initialize the dependence graph nodes for each statement
+     * @param stmts
+     */
     private void initializeNodes(Collection<Unit> stmts){  
     	// nodes for normal statements
         for(Unit s :stmts){
@@ -108,14 +113,14 @@ public abstract class AbstractPDGBuilder {
     /** Build nodes for call. */
     protected abstract void buildNodesForCall(Unit callsite);
     
-    protected abstract void buildFormalInDependences();
+    protected abstract void buildFormalInDependencies();
     
-    protected abstract void buildFormalOutDependences();
+    protected abstract void buildFormalOutDependencies();
     
-    protected abstract void buildDepForInvoke(Unit curStmt,DependenceNode curNode);
+    protected abstract void buildDepForInvoke(Unit curStmt, DependenceNode curNode);
     
     
-    protected void buildCtrlDependences(UnitGraph cfg,Collection<Unit> stmts){ 
+    protected void buildCtrlDependences(UnitGraph cfg, Collection<Unit> stmts){
     	Map<Unit,Collection<Unit>> unit2depends = DependencyHelper.calcCtrlDependences(cfg);
     	DependenceNode entry = _pdg.entry();
     	
@@ -148,49 +153,49 @@ public abstract class AbstractPDGBuilder {
             DependenceNode dest= _pdg.getStmtBindingNode(s);
             
             if(s instanceof Stmt && ((Stmt)s).containsInvokeExpr()){           
-                //invoke_stmt or assign_stmt with invoke_expr            	
+                // invoke_stmt or assign_stmt with invoke_expr
             	buildDepForInvoke(s, dest);            	           	
-            }            
+            }
             else{
-                //Including: assign_stmt, return_void_stmt, if_stmt, lookup_switch_stmt, 
-                //           table_switch_stmt, throw_stmt, ret_stmt, return_stmt, enter_monitor_stmt   
-            	//No dependence: breakpoint_stmt, goto_stmt, nop_stmt
+                // Including: assign_stmt, return_void_stmt, if_stmt, lookup_switch_stmt,
+                //           table_switch_stmt, throw_stmt, ret_stmt, return_stmt, enter_monitor_stmt
+            	// No dependence: breakpoint_stmt, goto_stmt, nop_stmt
                 buildDepForNormalStmt(s, dest);
             } 
         }
         
-        buildFormalInDependences();
-        buildFormalOutDependences();
+        buildFormalInDependencies();
+        buildFormalOutDependencies();
     }
      
-    private void buildDepForNormalStmt(Unit stmt,DependenceNode dest){
+    private void buildDepForNormalStmt(Unit stmt, DependenceNode dest){
     	// include use in left hand side and right hand side of the statement
     	List<ValueBox> useBoxes = stmt.getUseBoxes();	
     	for(ValueBox vb: useBoxes){
             Value use = vb.getValue();
           
-            //not a direct box containing variables
+            // not a direct box containing variables
             if(use instanceof Local){
             	Location loc = Location.valueToLocation(use);            
-            	buildDepForLocation(stmt,loc,dest);
+            	buildDepForLocation(stmt, loc, dest);
             }
             else if(use instanceof StaticFieldRef){
             	StaticFieldRef ref = (StaticFieldRef)use;
             	Location loc = Location.getGlobalLocation(ref.getField());          
-            	buildDepForLocation(stmt,loc,dest);
+            	buildDepForLocation(stmt, loc, dest);
             }
             else if(use instanceof InstanceFieldRef){ 
             	AccessPath ap = AccessPath.valueToAccessPath(_method, stmt, use);
-            	buildDepForRef(stmt,dest,ap);            	 
+            	buildDepForRef(stmt, dest, ap);
             }
             else if(use instanceof ArrayRef){
             	AccessPath ap = AccessPath.valueToAccessPath(_method, stmt, use); 
-                buildDepForRef(stmt,dest,ap);                
+                buildDepForRef(stmt, dest, ap);
             }
             else{
-            	//Ignored immediate: Constant
-            	//Ignore expressions, e.g., binop_expr, instance_of_expr, unop_expr, cast_expr,
-            	//new_expr, new_array_expr, new_multi_array_expr
+            	// Ignored immediate: Constant
+            	// Ignore expressions, e.g., binop_expr, instance_of_expr, unop_expr, cast_expr,
+            	//     new_expr, new_array_expr, new_multi_array_expr
             }
     	}
     }  
@@ -204,7 +209,7 @@ public abstract class AbstractPDGBuilder {
     }   
     
     /**
-     * Collect the dependences of instance field or array element access.
+     * Collect the dependencies of instance field or array element access.
      * The dependencies of the based variable is not considered here.
      * TODO: 这里性能还有很大的优化余地
      */
@@ -223,10 +228,13 @@ public abstract class AbstractPDGBuilder {
         }
     }
  
-   
+
     /**
      * Get the dependence graph nodes corresponding to the definition of location <code>loc</code>
-     * at statement <code>stmt</code>, so that dependence edges between def-use sites can be added.
+     *      at statement <code>stmt</code>, so that dependence edges between def-use sites can be added.
+     * @param stmt
+     * @param loc
+     * @return
      */
     protected Collection<DependenceNode> getDefinitionNodes(Unit stmt, Location loc){
     	Collection<DependenceNode> nodes = new ArrayList<DependenceNode>(1);
@@ -234,10 +242,15 @@ public abstract class AbstractPDGBuilder {
     	nodes.add(src);    	
     	return nodes;
     }
-    
-    /** Add a data dependence edge. */
-    protected void addDataDep(DependenceNode dest,Unit srcStmt,Location loc){    	
-    	Collection<DependenceNode> srcNodes = getDefinitionNodes(srcStmt,loc);
+
+    /**
+     * Add a data dependence edge.
+     * @param dest
+     * @param srcStmt
+     * @param loc
+     */
+    protected void addDataDep(DependenceNode dest, Unit srcStmt, Location loc){
+    	Collection<DependenceNode> srcNodes = getDefinitionNodes(srcStmt, loc);
     	for(DependenceNode src: srcNodes){
         	DependenceEdge edge = null;
         	if(_pdgOptions.withDependReason()){

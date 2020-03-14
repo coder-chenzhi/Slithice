@@ -11,10 +11,12 @@ public class JimpleStmtNode extends DependenceNode{
     
     public JimpleStmtNode(MethodOrMethodContext mc,Unit unit){
     	super(mc);
-        _stmt=unit;
+        _stmt = unit;
     }
     
-    /**Get the corresponding statement.*/
+    /**
+     * Get the corresponding statement.
+     */
     public Unit getStmt(){
         return _stmt;
     }

@@ -15,8 +15,11 @@ public class EntryNode extends DependenceNode{
    public Object clone(){
        return new EntryNode(_mc);
    }
-   
-   /**Get the corresponding method*/
+
+    /**
+     * Get the corresponding method
+     * @return
+     */
    public SootMethod getMethod(){
        return _mc.method();
    }
@@ -26,10 +29,11 @@ public class EntryNode extends DependenceNode{
    }
    
    public String toString(){
-	   String out = "#"+_id+" EN ";
-	   SootMethod m = _mc.method();
-	   out += m.getDeclaringClass().getShortName();
-	   out += "."+m.getName();
-	   return out;
+       SootMethod m = _mc.method();
+	   StringBuilder out = new StringBuilder();
+	   out.append("#").append(_id).append(" ENTRY ").
+               append(m.getDeclaringClass().getShortName()).
+               append(".").append(m.getName());
+	   return out.toString();
    }   
 }
