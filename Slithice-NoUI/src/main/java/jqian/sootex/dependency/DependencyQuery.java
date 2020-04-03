@@ -47,8 +47,8 @@ public class DependencyQuery implements IDependencyQuery {
 	}
 
 	/**
-	 * Get Write->Read dependencies.
-	 * Get the definition(/write) of the locations which are used(/read) by <code>Unit u</code>
+	 * Get flow-dependencies
+	 * Get previous def(/write) of the locations which are used(/read) by <code>Unit u</code>
 	 * @param m
 	 * @param u
 	 * @return
@@ -62,8 +62,8 @@ public class DependencyQuery implements IDependencyQuery {
 	}
 
 	/**
-	 *  Get Read->Write dependencies.
-	 *  Get the use(/read) of the locations which are defined(/written) by <code>Unit u</code>
+	 *  Get anti-dependencies.
+	 *  Get previous use(/read) of the locations which are defined(/written) by <code>Unit u</code>
 	 * @param m
 	 * @param u
 	 * @return

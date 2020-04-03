@@ -8,7 +8,8 @@ public class DepQuery {
 		test_ctrl_dep4(0);
 		test_ctrl_dep5(0);
 		test_ctrl_dep6(0);
-		
+		test_ctrl_dep7(0);
+
 		test_flow_dep1(0);
 		test_flow_dep2(0);
 		test_flow_dep3(0);
@@ -97,6 +98,34 @@ public class DepQuery {
 		
 		int y = x;		
 		return y;
+	}
+
+	static int test_ctrl_dep7(int x) {
+		if (x < 1) {
+			if ( x < 0) {
+				throw new RuntimeException();
+			} else {
+				x = x * 1;
+			}
+
+			if ( x < -1 ) {
+				x = x * 2;
+				return x;
+			}
+		} else {
+			if (x > 4) {
+				throw new RuntimeException();
+			} else {
+				try {
+					throw new Exception();
+				} catch (Exception e) {
+					x = x * 5;
+				}
+				x = x * 4;
+			}
+		}
+		x = x * 3;
+		return x;
 	}
 	
 	//flow dependences 

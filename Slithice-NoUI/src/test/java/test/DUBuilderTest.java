@@ -44,7 +44,7 @@ public class DUBuilderTest implements AllTestCases {
     	IGlobalDUQuery duQuery = Test.createDUQuery(ptsto, cfgProvider, _buildAll);
        
     	for(String signature: methodSignatures){
-			SootMethod m = Scene.v().getMethod(signature);			
+			SootMethod m = Scene.v().getMethod(signature);
 			IReachingDUQuery uq = duQuery.getRUQuery(m);		
 			testDUOnMethod("RU",uq, m);
 

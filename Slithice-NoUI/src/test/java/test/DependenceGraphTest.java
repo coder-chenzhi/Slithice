@@ -97,27 +97,27 @@ public class DependenceGraphTest implements AllTestCases{
      *  java CLASS test.slicing.cases.SDGCase "<test.slicing.cases.SDGCase: void test7()>"
      */
     public static void main(String[] args) {
-    	//String mainClass = PDG_MAIN_CLASS;
-    	String mainClass = SDGCases.CLASSES[5];
-    	
-    	Properties options = Test.loadConfig("../depConfig.xml");
-       	options.put("entry_class", mainClass);
-       	
-    	Test.loadClasses(true);     
-    	Test.doFastSparkPointsToAnalysis(false);
-    	Test.simplifyCallGraph();
-    	 
-    	HeapAbstraction locAbstraction = HeapAbstraction.FIELD_SENSITIVE;
-    	DepGraphOptions pdgOptions = new DepGraphOptions(true, false, locAbstraction);
-    	//String entryMethod = PDG[0]; //PDG_METHODS[1]; //PDG_METHODS[1];//
-    	String entryMethod = SDGCases.SDG_ENTRIES[5][0];
-    	
-    	
-    	Set<String> testedMethods = new HashSet<String>(); 
-    	testedMethods.add(entryMethod);
-    	
-    	testPDG(entryMethod, pdgOptions, testedMethods, false, false, false);
+		//String mainClass = PDG_MAIN_CLASS;
+		String mainClass = SDGCases.CLASSES[5];
+
+		Properties options = Test.loadConfig("../depConfig.xml");
+		options.put("entry_class", mainClass);
+
+		Test.loadClasses(true);
+		Test.doFastSparkPointsToAnalysis(false);
+		Test.simplifyCallGraph();
+
+		HeapAbstraction locAbstraction = HeapAbstraction.FIELD_SENSITIVE;
+		DepGraphOptions pdgOptions = new DepGraphOptions(true, false, locAbstraction);
+		//String entryMethod = PDG[0]; //PDG_METHODS[1]; //PDG_METHODS[1];//
+		String entryMethod = SDGCases.SDG_ENTRIES[5][0];
+
+
+		Set<String> testedMethods = new HashSet<String>();
+		testedMethods.add(entryMethod);
+
+		testPDG(entryMethod, pdgOptions, testedMethods, false, false, false);
 //    	testSDG(entryMethod, pdgOptions, false);
-    }
+	}
 }
 

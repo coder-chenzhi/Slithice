@@ -174,7 +174,7 @@ public class DependencyHelper {
    	 	while(postdomFinder.containInfiniteLoops()){
    	 		cfg = patchCFG(cfg);
    	 		postdomFinder = new CFGDominatorsFinder<Unit>(new InverseGraph<Unit>(cfg));
-   	 	}   	 	
+   	 	}
    	 	
 		DominatorTree postdomTree = new DominatorTree(postdomFinder);
 		
@@ -191,7 +191,7 @@ public class DependencyHelper {
 		 
 		// b. other conditional edges
 		for(Iterator<Unit> it=cfg.iterator(); it.hasNext(); ){
-			Unit u = it.next();			
+			Unit u = it.next();
 			List<Unit> succs = cfg.getSuccsOf(u);
 			// conditional edges
 			if(succs.size()>1){
@@ -227,7 +227,7 @@ public class DependencyHelper {
 		}
 
 		return node2depend;
-	}	
+	}
 	
 	private static Set<DominatorNode> findAncestors(DominatorTree postdomTree, 
 										DominatorNode start, DominatorNode end, boolean includeEnd){

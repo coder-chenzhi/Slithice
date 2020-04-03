@@ -16,6 +16,8 @@ import jqian.sootex.ptsto.SparkPtsToQuery;
 import jqian.sootex.ptsto.TypeBasedPtsToQuery;
 import jqian.sootex.util.SootUtils;
 
+import static test.AllTestCases.DepQuery.CTRL_DEPENDENCE_QUERY;
+
 /**
  *
  */
@@ -84,9 +86,9 @@ public class DependencyQueryTest implements AllTestCases{
         	Test.simplifyCallGraph();
     	} 
     	
-    	//test(pta, CTRL_DEPENDENCE_QUERY[1]);
+    	test(pta, CTRL_DEPENDENCE_QUERY[6]);
     	//test(pta, FLOW_DEPENDENCE_QUERY[4]);
     	//test(pta, ANTI_DEPENDENCE_QUERY[2]);
-    	test(pta, DepQuery.OUTPUT_DEPENDENCE_QUERY[2]);
+//    	test(pta, DepQuery.OUTPUT_DEPENDENCE_QUERY[2]);
     }  
 }
