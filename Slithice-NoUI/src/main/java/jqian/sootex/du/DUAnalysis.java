@@ -303,8 +303,8 @@ public abstract class DUAnalysis extends ForwardFlowAnalysis<Unit,FlowSet> imple
 	 * Collect parameter locations, including the formals, this pointer and the accessed globals.
 	 */
 	protected Collection<Location> collectParams(){
-		Set<Location> locs = new HashSet<Location>();  
-		 
+		Set<Location> locs = new HashSet<Location>();
+
 		Body body = _method.getActiveBody();
 		int argNum = _method.getParameterCount();
 	    for(int i=0;i<argNum;i++){

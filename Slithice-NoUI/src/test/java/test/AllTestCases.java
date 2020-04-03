@@ -50,6 +50,7 @@ interface AllTestCases{
 			"<test.cases.DepQuery: int test_ctrl_dep4(int)>",
 			"<test.cases.DepQuery: int test_ctrl_dep5(int)>",
 			"<test.cases.DepQuery: int test_ctrl_dep6(int)>",
+			"<test.cases.DepQuery: int test_ctrl_dep7(int)>",
 		};
 		
 		public static String[] FLOW_DEPENDENCE_QUERY = {

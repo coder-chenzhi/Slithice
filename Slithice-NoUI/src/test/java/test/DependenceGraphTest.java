@@ -99,7 +99,7 @@ public class DependenceGraphTest implements AllTestCases{
     	//String mainClass = PDG_MAIN_CLASS;
     	String mainClass = SDGCases.CLASSES[5];
     	
-    	Properties options = Test.loadConfig("/test/dependency/config.xml"); 
+    	Properties options = Test.loadConfig("../depConfig.xml");
        	options.put("entry_class", mainClass);
        	
     	Test.loadClasses(true);     
@@ -115,8 +115,8 @@ public class DependenceGraphTest implements AllTestCases{
     	Set<String> testedMethods = new HashSet<String>(); 
     	testedMethods.add(entryMethod);
     	
-    	//testPDG(entryMethod, pdgOptions, testedMethods, false, false, false); 
-    	testSDG(entryMethod, pdgOptions, false); 
+    	testPDG(entryMethod, pdgOptions, testedMethods, false, false, false);
+//    	testSDG(entryMethod, pdgOptions, false);
     }     
 }
 

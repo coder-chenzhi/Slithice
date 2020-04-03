@@ -8,6 +8,7 @@ import soot.toolkits.graph.*;
 
 /**
  * FIX 2008-07-12 An error occurred in handling exceptional flows
+ * A hammock graph is a graph with single entry and single exit.
  */ 
 public class HammockCFG extends UnitGraph{
 	protected Collection<Unit> _units; //valid units, may be a part of unitChain

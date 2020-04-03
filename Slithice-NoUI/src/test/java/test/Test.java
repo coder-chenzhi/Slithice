@@ -160,7 +160,7 @@ public class Test {
 	public static void showCFG(SootMethod m, String tool){	
 		Body body = m.getActiveBody();
 		DirectedGraph<Unit> ucfg=new BriefUnitGraph(body);
-		showCFG(m, ucfg, tool);    
+		showCFG(m, ucfg, tool);
 	}
 	
 	public static void showCFG(SootMethod m){		 
@@ -239,7 +239,7 @@ public class Test {
 	}
 	
 	public static CallGraph simplifyCallGraph(){
-		CallGraph cg = Scene.v().getCallGraph();				
+		CallGraph cg = Scene.v().getCallGraph();
 		PointsToAnalysis ptsTo = Scene.v().getPointsToAnalysis();
 		CallGraphRefiner refiner = new CallGraphRefiner(ptsTo, true);   	
 		CallGraph newCg = refiner.refine(cg, new CallGraphRefiner.AggressiveCallGraphFilter());				    

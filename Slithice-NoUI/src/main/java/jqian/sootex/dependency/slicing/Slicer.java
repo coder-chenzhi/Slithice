@@ -56,7 +56,7 @@ public abstract class Slicer {
     			for(DependenceEdge e: inEdges){
     				DependenceNode from = e.getFrom();
     				if(e instanceof CtrlDependenceEdge){
-    					startingNodes.add(from);    						
+    					startingNodes.add(from);
     				}
     				else{
     					DataDependenceEdge dd = (DataDependenceEdge)e;

@@ -19,7 +19,7 @@ import soot.jimple.toolkits.typing.fast.SingletonList;
 public class SDGUtil implements AllTestCases{  
 	public static SDG constructSDG(SootMethod entry,DepGraphOptions opts,boolean verbose, int javaLibDepth){
 		Collection entries = new LinkedList();  
-		entries.add(entry);		
+		entries.add(entry);
 		
 		SDG sdg = constructSDG(PointsToAnalysisType.SPARK, HeapAbstraction.FIELD_SENSITIVE, entries,opts,verbose, javaLibDepth);
 		return sdg;

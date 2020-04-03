@@ -8,7 +8,7 @@
 <classpath>E:\IDEAWorkspace\Slithice\Slithice-NoUI\target\test-classes</classpath>
 
 <!-- entry of the application -->
-<entry_class>test.cases.DepQuery</entry_class>
+<entry_class>test.cases.SDG6</entry_class>
 
 <jdk_path>C:\Program Files\Java\jdk1.8.0_211</jdk_path>
 

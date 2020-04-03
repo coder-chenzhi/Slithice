@@ -58,7 +58,7 @@ public class PDGBuilder extends AbstractPDGBuilder {
     	public Collection<Object> getBindingSet(Collection<Location> locs){
     		Set<Object> bindingSet = new HashSet<Object>();        		
     		for(Location loc: locs){         			
-    			Object binding = getBindingForActualAndFormal(loc);    				
+    			Object binding = getBindingForActualAndFormal(loc);
     			bindingSet.add(binding);
             } 
     		
@@ -271,7 +271,7 @@ public class PDGBuilder extends AbstractPDGBuilder {
 			_pdg.addEdge(edge);  
     	}
     	
-    	// build data-flow dependences
+    	// build data-flow dependencies
     	HeapAbstraction locAbstraction  = _pdgOptions.getInterfaceLocationAbstraction();
     	if(locAbstraction==HeapAbstraction.FIELD_SENSITIVE){
     		for(FormalNode f: outs){        
@@ -305,13 +305,13 @@ public class PDGBuilder extends AbstractPDGBuilder {
     }
     
     @Override
-    protected void buildNodesForCall(Unit callsite){    
-    	//also build a unique node to link all possible calls
+    protected void buildNodesForCall(Unit callsite){
+    	// also build a unique node to link all possible calls
     	CallsiteNode callsiteNode = new CallsiteNode(_method,callsite);
-        _pdg.addNode(callsiteNode);  
+        _pdg.addNode(callsiteNode);
         
-        //We do not build call nodes for callsites whose callee are discarded during call graph simplification
- 	    CallGraph cg = Scene.v().getCallGraph(); 	    
+        // We do not build call nodes for callsites whose callee are discarded during call graph simplification
+ 	    CallGraph cg = Scene.v().getCallGraph();
  	    Callees callees = new Callees(cg,callsite);	
  	    for(SootMethod tgt: callees.explicits()){
  	    	//add call node
@@ -441,14 +441,14 @@ public class PDGBuilder extends AbstractPDGBuilder {
     		DependenceNode n = _pdg.getBindingFormal(binding, true);
     		nodes.add(n);
     	}
-    	else{    		
+    	else{
     		if((stmt instanceof Stmt) && ((Stmt)stmt).containsInvokeExpr()){
     			DependenceNode src = _pdg.getStmtBindingNode(stmt);
     			if(src instanceof CallsiteNode){
     				CallsiteNode callsiteNode = (CallsiteNode)src;
     				Collection<CallNode> calleeNodes = callsiteNode.getCalleeNodes();
     				
-    				//If all targets are tailed during call graph simplification
+    				// If all targets are tailed during call graph simplification
     				if(calleeNodes.isEmpty()){
     					nodes.add(src);
     				}
@@ -544,13 +544,13 @@ public class PDGBuilder extends AbstractPDGBuilder {
 	            	buildDepForActualIn(dest,curStmt,tgt,receiver);
 	        }
 	       
-	        //TODO need more consideration for native method
+	        // TODO need more consideration for native method
 	        if(!tgt.isConcrete()){//side effect free or we just do not want to consider	            
-	           continue;	           
+	           continue;
 	        }	     
 	        
-	        //Get dependence for side effected heap locations 
-	        //handle ordinary calls
+	        // Get dependence for side effected heap locations
+	        // handle ordinary calls
 	        Collection<Location> useHeaps = _sdgBuilder.getTgtUsedHeapLocs(tgt);	       
 	        for(Location loc: useHeaps){	    	    
 	    	    buildDepForActualIn(dest,curStmt,tgt,loc);

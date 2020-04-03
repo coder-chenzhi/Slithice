@@ -41,7 +41,7 @@ public abstract class AbstractPDGBuilder {
         this._pdgOptions = dgOptions;    
         this._pdg = new PDG(m);
         this._ptsto = ptsTo;       
-        this._rd = rd;      
+        this._rd = rd;
         this._cfg = cfg;     
         this._heapAbstraction = heapAbstraction;
     }    
@@ -103,7 +103,7 @@ public abstract class AbstractPDGBuilder {
             }
         } 
         
-        //build formal -in/-out nodes
+        // build formal -in/-out nodes
         buildFormals();
     }
     

@@ -1,5 +1,7 @@
 package test.cases;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 public class SideEffect {
 	public static void main(String[] args){
 		Node n = new Node();
@@ -237,9 +239,14 @@ public class SideEffect {
 	}
 
 	static void testStringBuilder() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("This").append(" ").append("is").append(" ").append("a").append(" ").append("test");
-		System.out.println(sb.toString());
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append("This").append(" ").append("is").append(" ").append("a").append(" ").append("test1");
+
+		StringBuilder sb2 = new StringBuilder();
+		sb2.append("This").append(" ").append("is").append(" ").append("a").append(" ").append("test2");
+
+		System.out.println(sb1.toString());
+		System.out.println(sb2.toString());
 	}
 
 	static void testException(){
