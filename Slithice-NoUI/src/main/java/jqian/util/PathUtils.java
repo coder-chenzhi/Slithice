@@ -109,7 +109,7 @@ public class PathUtils {
 	}
 	
 	public static String getJreClasspath(String jdkRoot){
-		return jdkRoot + "/jre/lib/rt.jar;";
+		return jdkRoot + "/jre/lib/rt.jar" + File.pathSeparator;
 //		        + jdkRoot + "/jre/lib/sunrsasign.jar;"
 //		        + jdkRoot + "/jre/lib/jsse.jar;"
 //				+ jdkRoot + "/jre/lib/jce.jar;"

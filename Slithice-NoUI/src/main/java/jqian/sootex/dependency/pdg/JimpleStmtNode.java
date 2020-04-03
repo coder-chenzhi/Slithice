@@ -46,7 +46,7 @@ public class JimpleStmtNode extends DependenceNode{
     }
     
     public String toString(){
-        return SootUtils.getStmtString(_stmt);
+        return "#" + _id + " NORMAL " + SootUtils.getStmtString(_stmt);
     }
     
     public Object getBinding(){

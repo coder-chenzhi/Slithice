@@ -100,7 +100,7 @@ public class SDGUtil implements AllTestCases{
        	options.put("entry_class", MAIN_CLASS);
        	
     	Test.loadClasses(true);     
-    	Test.doFastSparkPointsToAnalysis();
+    	Test.doFastSparkPointsToAnalysis(false);
     	Test.simplifyCallGraph();
     	
     	//SootMethod m = Scene.v().getMethod("<sun.misc.CharacterDecoder: void decodeBuffer(java.io.InputStream,java.io.OutputStream)>");

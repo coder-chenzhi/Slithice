@@ -336,8 +336,8 @@ public class SootUtils {
 	
 	public static SootClass loadClassesForEntry(String entryClass){
 		Scene scene = Scene.v();
-		SootClass mainClass = scene.loadClassAndSupport(entryClass);		
-		mainClass.setApplicationClass();		
+		SootClass mainClass = scene.loadClassAndSupport(entryClass);
+		mainClass.setApplicationClass();
 		scene.setMainClass(mainClass);
 		scene.loadNecessaryClasses();
 		scene.setEntryPoints(EntryPoints.v().application());

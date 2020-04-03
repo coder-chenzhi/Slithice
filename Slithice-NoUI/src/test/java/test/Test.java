@@ -75,7 +75,7 @@ public class Test {
 		file.mkdirs();
 		//clearDirectory(outputDir);
 		
-		classpath  = PathUtils.getJreClasspath(jdkPath) + ";" + classpath;
+		classpath  = PathUtils.getJreClasspath(jdkPath) + File.pathSeparator + classpath;
 		
 		if(isWholeProgramAnalysis){
 			if(inShimple){
@@ -201,19 +201,24 @@ public class Test {
     }
 	
 	
-	public static void doFastSparkPointsToAnalysis() {
+	public static void doFastSparkPointsToAnalysis(boolean usePoem) {
 		Map<String,String> opt = new HashMap<String,String>();
 		opt.put("simulate-natives","false");   
 		opt.put("implicit-entry","false");
-		SootUtils.doSparkPointsToAnalysis(opt);
-		// simplify call graph, ignore method not reachable from main entry
-		// ignore implicit calls (except thread calls)
-		CallGraph cg = Scene.v().getCallGraph();
-		PointsToAnalysis ptsTo = Scene.v().getPointsToAnalysis();
-		CallGraphRefiner refiner = new CallGraphRefiner(ptsTo, false);
-		CallGraph newCg = refiner.refine(cg, new CallGraphRefiner.AggressiveCallGraphFilter());
-		Scene.v().setCallGraph(newCg);
-		Scene.v().setReachableMethods(null);   //update reachable methods
+		if (usePoem) {
+			SootUtils.doGeomPointsToAnalysis(opt);
+		} else {
+			SootUtils.doSparkPointsToAnalysis(opt);
+			// simplify call graph, ignore method not reachable from main entry
+			// ignore implicit calls (except thread calls)
+			CallGraph cg = Scene.v().getCallGraph();
+			PointsToAnalysis ptsTo = Scene.v().getPointsToAnalysis();
+			CallGraphRefiner refiner = new CallGraphRefiner(ptsTo, false);
+			CallGraph newCg = refiner.refine(cg, new CallGraphRefiner.AggressiveCallGraphFilter());
+			Scene.v().setCallGraph(newCg);
+			Scene.v().setReachableMethods(null);   //update reachable methods
+		}
+
 	}
 	
 	public static PDG buildUnsafePDG(SootMethod m,IPtsToQuery pt2Query,IReachingDUQuery rd,boolean withCtrlDep){

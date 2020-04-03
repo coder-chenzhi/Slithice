@@ -123,7 +123,7 @@ public class DUBuilderTest implements AllTestCases {
     	
     	if(!useTypeBasedPtsToAnalysis){
     		//SootUtils.doSparkPointsToAnalysis(Collections.EMPTY_MAP);
-        	Test.doFastSparkPointsToAnalysis();
+        	Test.doFastSparkPointsToAnalysis(false);
         	Test.simplifyCallGraph();
     	}
     	

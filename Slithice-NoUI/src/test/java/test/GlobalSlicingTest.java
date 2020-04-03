@@ -109,7 +109,7 @@ public class GlobalSlicingTest implements AllTestCases{
        	options.put("entry_class", MAIN_CLASS);
        	
     	Test.loadClasses(true);     
-    	Test.doFastSparkPointsToAnalysis();
+    	Test.doFastSparkPointsToAnalysis(false);
     	Test.simplifyCallGraph();
     	
     	testGlobalSliceOnCriterion(entry, javaCriterion);

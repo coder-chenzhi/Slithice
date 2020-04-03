@@ -9,13 +9,16 @@ public class PtsTo {
     public PtsTo _recr;
     
     public static void main(String[] args){
-        PtsTo a=new PtsTo();    
+        PtsTo a=new PtsTo();
         a.test_flow_function("bingo",a);
         a.test_merge();
         a.test_switch();
         test_branches(true,false);
         
         a.test_interproc(null,null,true);
+
+        test_early_stop(true);
+        test_simple_branch(true);
 
         a.testStringBuilder();
         a.testStringBuilderWrapper();
@@ -25,6 +28,7 @@ public class PtsTo {
         StringBuilderWrapper sbw3 = new StringBuilderWrapper();
         a.testStringBuilderWrapperFieldAccess(sbw1);
         a.testStringBuilderWrapperFieldAccess(sbw2);
+        a.testStringBuilderWrapperFieldAccessWrapper();
         sbw3.append(3);
 
     }
@@ -192,6 +196,22 @@ public class PtsTo {
         
     }
 
+    public static void test_early_stop(boolean flag) {
+        if (flag) {
+            System.out.println("then branch, early stop");
+            return;
+        } else {
+            System.out.println("else branch");
+        }
+        System.out.println("rest code");
+    }
+
+    public static void test_simple_branch(boolean flag) {
+        if (flag) {
+            System.out.println("then branch");
+        }
+    }
+
     public static PtsTo _iptr;
     private PtsTo switch_ptr(PtsTo a,PtsTo b){
         a._ref=b._ref;
@@ -222,6 +242,11 @@ public class PtsTo {
 
         StringBuilderWrapper sb2 = new StringBuilderWrapper();
         sb2.sb.append(2);
+    }
+
+    private void testStringBuilderWrapperFieldAccessWrapper() {
+        StringBuilderWrapper sbw = new StringBuilderWrapper();
+        testStringBuilderWrapperFieldAccess(sbw);
     }
 
     private void testStringBuilderWrapperFieldAccess(StringBuilderWrapper sbw) {

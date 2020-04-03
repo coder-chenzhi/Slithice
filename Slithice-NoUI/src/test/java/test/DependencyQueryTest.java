@@ -80,7 +80,7 @@ public class DependencyQueryTest implements AllTestCases{
     	
     	if(!pta.equals("type-based")){
     		//SootUtils.doSparkPointsToAnalysis(Collections.EMPTY_MAP);
-        	Test.doFastSparkPointsToAnalysis();
+        	Test.doFastSparkPointsToAnalysis(false);
         	Test.simplifyCallGraph();
     	} 
     	

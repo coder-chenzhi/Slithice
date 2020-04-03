@@ -5,7 +5,10 @@
 <debug>true</debug>
 
 <!-- paths for .class files -->
-<classpath>E:\IDEAWorkspace\Slithice\Slithice-NoUI\target\test-classes</classpath>
+<!--
+    <classpath>E:\IDEAWorkspace\Slithice\Slithice-NoUI\target\test-classes</classpath>
+-->
+<classpath>/home/chenzhi/Code/SLithice/Slithice-NoUI/target/test-classes</classpath>
 
 <!-- entry of the application -->
 <entry_class>test.cases.DepQuery</entry_class>

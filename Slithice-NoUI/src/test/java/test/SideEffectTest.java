@@ -94,7 +94,7 @@ public class SideEffectTest implements AllTestCases{
     	Test.loadClasses(true);
     	
     	//SootUtils.doSparkPointsToAnalysis(Collections.EMPTY_MAP);
-    	Test.doFastSparkPointsToAnalysis();
+    	Test.doFastSparkPointsToAnalysis(true);
 
     	SideEffectTest.widthFirstDumpCallGraph(Scene.v().getCallGraph(), Scene.v().getMethod("<test.cases.SideEffect: void main(java.lang.String[])>"), 10000);
 

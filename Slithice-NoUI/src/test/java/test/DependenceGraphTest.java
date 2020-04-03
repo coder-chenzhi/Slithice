@@ -49,9 +49,10 @@ public class DependenceGraphTest implements AllTestCases{
     	    	 DependenceGraph depGraph = pdg;
     	         if(toJavaDepGraph){
     	         	depGraph = pdg.toJavaStmtDepGraph();        	
-    	         }       
+    	         }
     	         
-    	         SDGUtil.showDependenceGraph(depGraph, "./output/dot/dep_"+m.getName()+".dot");    	 
+//    	         SDGUtil.showDependenceGraph(depGraph, "./output/dot/dep_"+m.getName()+".dot");
+				 System.out.println(depGraph);
     	     }
     	}
     	
@@ -65,7 +66,7 @@ public class DependenceGraphTest implements AllTestCases{
     
     static void testSDG(String entryMethodSignature, DepGraphOptions _options, boolean showPDGs) {
     	SootMethod main = Scene.v().getMethod(entryMethodSignature);    	
-		SDG sdg = SDGUtil.constructSDG(main,_options,true, 2);
+		SDG sdg = SDGUtil.constructSDG(main,_options,true, 0);
 		sdg.buildSummaryEdges(main);
 		sdg.connectPDGs();
 		sdg.compact();
@@ -99,11 +100,11 @@ public class DependenceGraphTest implements AllTestCases{
     	//String mainClass = PDG_MAIN_CLASS;
     	String mainClass = SDGCases.CLASSES[5];
     	
-    	Properties options = Test.loadConfig("/test/dependency/config.xml"); 
+    	Properties options = Test.loadConfig("../depConfig.xml");
        	options.put("entry_class", mainClass);
        	
     	Test.loadClasses(true);     
-    	Test.doFastSparkPointsToAnalysis();
+    	Test.doFastSparkPointsToAnalysis(false);
     	Test.simplifyCallGraph();
     	 
     	HeapAbstraction locAbstraction = HeapAbstraction.FIELD_SENSITIVE;
@@ -115,8 +116,8 @@ public class DependenceGraphTest implements AllTestCases{
     	Set<String> testedMethods = new HashSet<String>(); 
     	testedMethods.add(entryMethod);
     	
-    	//testPDG(entryMethod, pdgOptions, testedMethods, false, false, false); 
-    	testSDG(entryMethod, pdgOptions, false); 
-    }     
+    	testPDG(entryMethod, pdgOptions, testedMethods, false, false, false);
+//    	testSDG(entryMethod, pdgOptions, false);
+    }
 }
 

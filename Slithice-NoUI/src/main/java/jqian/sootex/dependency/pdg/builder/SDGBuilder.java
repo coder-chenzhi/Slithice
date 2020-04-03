@@ -108,8 +108,9 @@ public class SDGBuilder {
      
 		Date startTime=null;
         if(_verbose){
-            startTime=new Date();           
-        }
+            startTime=new Date();
+            Global.v().out.println("[PDG] start to build " + id + ": " + m);
+		}
         
 		PDGBuilder builder;
 		CallGraph cg = Scene.v().getCallGraph();

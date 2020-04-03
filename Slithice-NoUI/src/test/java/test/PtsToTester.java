@@ -40,7 +40,7 @@ public class PtsToTester {
                             ap = ap.appendFieldRef(f);
                             out.print("\n   " + ap + " : ");
                             if (ap.toString().equals("sbw.sb")) {
-                                System.out.println("\nPause");
+//                                System.out.println("\nPause");
                             }
                             Set<?> locs = PtsToHelper.getAccessedLocations(pt2Query, HeapAbstraction.FIELD_SENSITIVE, null, ap);
                             Test.printCollection(locs.iterator(),",");
