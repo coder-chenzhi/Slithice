@@ -20,17 +20,7 @@ import soot.RefLikeType;
 import soot.SootMethod;
 import soot.Unit;
 import soot.Value;
-import soot.jimple.AnyNewExpr;
-import soot.jimple.CastExpr;
-import soot.jimple.ConcreteRef;
-import soot.jimple.Constant;
-import soot.jimple.DefinitionStmt;
-import soot.jimple.IdentityStmt;
-import soot.jimple.InstanceInvokeExpr;
-import soot.jimple.InvokeExpr;
-import soot.jimple.InvokeStmt;
-import soot.jimple.ReturnStmt;
-import soot.jimple.ThrowStmt;
+import soot.jimple.*;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.shimple.PhiExpr;
 import soot.toolkits.graph.MutableDirectedGraph;
@@ -311,9 +301,7 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 					}
 					// 5. l = r.f, l = r[], l = g
 					else if (right instanceof ConcreteRef) {
-						// 2020.2.6 Chenzhi
-						// why do nothing?
-						// Because those locals have escaped already, we don't need to track them.
+						// The escape status of l or r will not be changed by those operations
 					} else if (right instanceof InvokeExpr) {
 						handleMethodCallForEscape(varConn, left, right, u);
 					}
@@ -338,8 +326,15 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 					// costly. We want to keep our escape analysis as fast as possible. Moreover,
 					// this way, assuming all field access will escape, reduces the precision of our analysis,
 					// but increases the safeness of our analysis.
+					// 2020.4.9 FIXME l.f = r may not escape
 					if (right instanceof Local) {
-						varConn.addEdge(Boolean.TRUE, right);
+						if (left instanceof StaticFieldRef) {
+							varConn.addEdge(Boolean.TRUE, right);
+						} else if (left instanceof InstanceFieldRef) {
+							varConn.addEdge(((InstanceFieldRef) left).getBase(), right);
+						} else if (left instanceof ArrayRef) {
+							varConn.addEdge(((ArrayRef) left).getBase(), right);
+						}
 					}
 				}
 				// others
@@ -377,6 +372,7 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 		for (Iterator<?> it = rm.iterator(); it.hasNext();) {
 			SootMethod m = (SootMethod) it.next();
 			if (m.isConcrete()) {
+				System.out.println("[DEBUG] " + m.getSignature() + " : " + m.getNumber());
 				boolean hasRefReturn = m.getReturnType() instanceof RefLikeType;
 				if (hasRefReturn) {
 					returnedAnalysis(m);
@@ -407,22 +403,46 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 		return _mescaped[m.getNumber()];
 	}
 
+	/**
+	 * if variable v in method m is local
+	 * @param m method
+	 * @param v variable
+	 * @return
+	 */
 	public boolean isRefTgtLocal(SootMethod m, Local v) {
 		int mId = m.getNumber();
 		Set<Local> escaped = _vescaped[mId];
 		Set<Local> returned = _returned[mId];
 		Set<Local> nonfresh = _vnfresh[mId];
 
+		// if v escape from m
 		if (escaped == null || escaped.contains(v)) {
 			return false;
 		}
+		// if v return from m
 		if (returned == null || returned.contains(v)) {
 			return false;
 		}
+		// if v is non-fresh variable
 		if (nonfresh.contains(v)) {
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * get all local variables in method
+	 * @param m
+	 * @return
+	 */
+	public Set<Local> getLocalVars(SootMethod m) {
+		Set<Local> localVars = new HashSet<>();
+		for (Local l : m.getActiveBody().getLocals()) {
+			if (isRefTgtLocal(m, l)) {
+				localVars.add(l);
+			}
+		}
+		return localVars;
 	}
 }

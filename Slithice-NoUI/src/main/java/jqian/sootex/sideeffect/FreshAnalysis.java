@@ -18,19 +18,10 @@ import soot.Local;
 import soot.RefLikeType;
 import soot.SootMethod;
 import soot.Type;
+import soot.jimple.*;
 import soot.jimple.toolkits.typing.fast.BottomType;
 import soot.Unit;
 import soot.Value;
-import soot.jimple.AnyNewExpr;
-import soot.jimple.ArrayRef;
-import soot.jimple.CastExpr;
-import soot.jimple.Constant;
-import soot.jimple.DefinitionStmt;
-import soot.jimple.IdentityStmt;
-import soot.jimple.InstanceFieldRef;
-import soot.jimple.InvokeExpr;
-import soot.jimple.ReturnStmt;
-import soot.jimple.StaticFieldRef;
 import soot.jimple.toolkits.callgraph.CallGraph;
 import soot.shimple.PhiExpr;
 import soot.toolkits.graph.HashMutableDirectedGraph;
@@ -51,9 +42,8 @@ import jqian.util.Utils;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class FreshAnalysis implements ILocalityQuery{
-	// 纯鲜对象，不是传进来的
-	protected boolean[] _mfresh;		
-	protected Set<Local>[] _vnfresh;	//non fresh locals
+	protected boolean[] _mfresh;		// if all return values of method are fresh locals
+	protected Set<Local>[] _vnfresh;	// non fresh locals
 	
 	protected CallGraph _cg;
 	
@@ -94,7 +84,8 @@ public class FreshAnalysis implements ILocalityQuery{
 		// build a constraint graph
 		MutableDirectedGraph<Object> varConn = initVarConnectionGraph(m);
 		Body body = m.retrieveActiveBody();
-		
+		Value thisRef = null;
+
 		for(Unit u: body.getUnits()){
 			if(u instanceof ReturnStmt){			 
 				Value v = ((ReturnStmt)u).getOp();		 
@@ -109,22 +100,32 @@ public class FreshAnalysis implements ILocalityQuery{
 				
 				Type leftType = left.getType();
 				
-				//assignment on non-reference variables
+				// assignment on non-reference variables
 				if(!(leftType instanceof RefLikeType) && !(leftType instanceof BottomType)){
 					
 				}							
 				else if(left instanceof Local){
-					//1. l = @param, l = @this
-					if(d instanceof IdentityStmt){			 
-						varConn.addEdge(Boolean.FALSE, left);
+					// 1. l = @param, l = @this
+					// Conceptually, formal parameters and this object are not fresh locals,
+					// as they are created at outside of current function
+					if(d instanceof IdentityStmt){
+						if (right instanceof ParameterRef) {
+							varConn.addEdge(Boolean.FALSE, left);
+						}
+						if (right instanceof ThisRef) {
+							thisRef = left;
+						}
 					}	
-					//2. "l = new C", "l = constant"
+					// 2. "l = new C", "l = constant"
+					// Obviously, the returned object of new expression are fresh
 					else if(right instanceof AnyNewExpr || right instanceof Constant){}
-					//3. l = r
+					// 3. l = r
+					// The freshness of l is determined by r
 					else if(right instanceof Local){					
 						varConn.addEdge(right, left);
 					}
-					//4. l = (cast)r
+					// 4. l = (cast)r
+					// The freshness of l is determined by r
 					else if(right instanceof CastExpr){
 						CastExpr cast = (CastExpr)right;
 						Value op = cast.getOp();
@@ -132,18 +133,26 @@ public class FreshAnalysis implements ILocalityQuery{
 							varConn.addEdge(op, left);
 						}
 					}		
-					//5. l = r.f
-					else if(right instanceof InstanceFieldRef){	
-						varConn.addEdge(Boolean.FALSE, left);
+					// 5. l = r.f
+					// TODO can we add connection between l and r, instead of connecting l and Boolean.FALSE?
+					else if(right instanceof InstanceFieldRef){
+						// non-this field access
+						if (((InstanceFieldRef) right).getBase() != thisRef) {
+							varConn.addEdge(Boolean.FALSE, left);
+						}
 					}
-					//6. l = r[]
+					// 6. l = r[]
+					// TODO can we add connection between l and r, instead of connecting l and Boolean.FALSE?
 					else if(right instanceof ArrayRef){	
 						varConn.addEdge(Boolean.FALSE, left);
 					}
-					//7. l = g
+					// 7. l = g
+					// local l points to static field g, static fields are created at outside of current function,
+					// so local l is not fresh
 					else if(right instanceof StaticFieldRef){
 						varConn.addEdge(Boolean.FALSE, left);
-					}//8. l=Phi();
+					}
+					// 8. l = Phi();
 					else if (right instanceof PhiExpr) {
 						List<Value> args = ((PhiExpr) right).getValues();						
 						for(Value a: args){
@@ -173,11 +182,14 @@ public class FreshAnalysis implements ILocalityQuery{
 						}
 					}
 				}
-				//6. g = r
-				else if(left instanceof StaticFieldRef){}			 
-				//7. l.f = r
-				else if(left instanceof InstanceFieldRef){}			
-				//9. l[] = r
+				// 6. g = r
+				// The freshness of r will not be changed by this case
+				else if(left instanceof StaticFieldRef){}
+				// 7. l.f = r
+				// The freshness of r will not be changed by this case
+				else if(left instanceof InstanceFieldRef){}
+				// 9. l[] = r
+				// The freshness of r will not be changed by this case
 				else if(left instanceof ArrayRef){}
 				//others
 				else{
@@ -210,7 +222,8 @@ public class FreshAnalysis implements ILocalityQuery{
 		List<?> rm = Cache.v().getTopologicalOrder();
 		for (Iterator<?> it = rm.iterator(); it.hasNext();) {
 			SootMethod m = (SootMethod) it.next();
-			if(m.isConcrete()){				
+			if(m.isConcrete()){
+				System.out.println("[DEBUG] " + m.getSignature() + " : " + m.getNumber());
 				freshAnalysis(m);
 			}
 		}
