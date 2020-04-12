@@ -37,7 +37,7 @@ public class TestSparkPtsToQuery{
     public static void testPeom() {
         Properties options = Test.loadConfig("../ptsConfig.xml");
         Test.loadClasses(true);
-        Test.doFastSparkPointsToAnalysis(true);
+        Test.doFastSparkPointsToAnalysis(true, false);
 
 //        SootMethod call0 = Scene.v().getSootClass("test.cases.PtsTo").getMethodByName("main");
 //        SootMethod call1 = Scene.v().getMethod("<test.cases.StringBuilderWrapper: test.cases.StringBuilderWrapper append(int)>");
@@ -90,7 +90,7 @@ public class TestSparkPtsToQuery{
     public static void testSpark() {
         Properties options = Test.loadConfig("../ptsConfig.xml");
         Test.loadClasses(true);
-        Test.doFastSparkPointsToAnalysis(false);
+        Test.doFastSparkPointsToAnalysis(false, false);
 
         SootMethod method = Scene.v().getMethod(TestSparkPtsToQuery.CASES[9]);
         BlockGraph blcokGraph = new BriefBlockGraph(method.getActiveBody());

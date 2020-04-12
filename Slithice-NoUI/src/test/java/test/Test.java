@@ -201,7 +201,7 @@ public class Test {
     }
 	
 	
-	public static void doFastSparkPointsToAnalysis(boolean usePoem) {
+	public static void doFastSparkPointsToAnalysis(boolean usePoem, boolean refineCG) {
 		Map<String,String> opt = new HashMap<String,String>();
 		opt.put("simulate-natives","false");   
 		opt.put("implicit-entry","false");
@@ -209,14 +209,16 @@ public class Test {
 			SootUtils.doGeomPointsToAnalysis(opt);
 		} else {
 			SootUtils.doSparkPointsToAnalysis(opt);
-			// simplify call graph, ignore method not reachable from main entry
-			// ignore implicit calls (except thread calls)
-			CallGraph cg = Scene.v().getCallGraph();
-			PointsToAnalysis ptsTo = Scene.v().getPointsToAnalysis();
-			CallGraphRefiner refiner = new CallGraphRefiner(ptsTo, false);
-			CallGraph newCg = refiner.refine(cg, new CallGraphRefiner.AggressiveCallGraphFilter());
-			Scene.v().setCallGraph(newCg);
-			Scene.v().setReachableMethods(null);   //update reachable methods
+			if (refineCG) {
+				// simplify call graph, ignore method not reachable from main entry
+				// ignore implicit calls (except thread calls)
+				CallGraph cg = Scene.v().getCallGraph();
+				PointsToAnalysis ptsTo = Scene.v().getPointsToAnalysis();
+				CallGraphRefiner refiner = new CallGraphRefiner(ptsTo, false);
+				CallGraph newCg = refiner.refine(cg, new CallGraphRefiner.AggressiveCallGraphFilter());
+				Scene.v().setCallGraph(newCg);
+				Scene.v().setReachableMethods(null);   //update reachable methods
+			}
 		}
 
 	}

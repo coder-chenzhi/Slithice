@@ -104,7 +104,7 @@ public class DependenceGraphTest implements AllTestCases{
 		options.put("entry_class", mainClass);
 
 		Test.loadClasses(true);
-		Test.doFastSparkPointsToAnalysis(false);
+		Test.doFastSparkPointsToAnalysis(false, false);
 		Test.simplifyCallGraph();
 
 		HeapAbstraction locAbstraction = HeapAbstraction.FIELD_SENSITIVE;

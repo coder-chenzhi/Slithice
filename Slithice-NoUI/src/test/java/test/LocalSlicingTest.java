@@ -131,7 +131,7 @@ public class LocalSlicingTest implements AllTestCases{
        	options.put("entry_class", mainClass);
        	
     	Test.loadClasses(true);     
-    	Test.doFastSparkPointsToAnalysis(false);
+    	Test.doFastSparkPointsToAnalysis(false, false);
     	Test.simplifyCallGraph();
     	
     	testLocalSlicingOnCriterion(javaCriterion);

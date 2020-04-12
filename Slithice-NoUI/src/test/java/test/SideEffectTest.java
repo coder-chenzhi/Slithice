@@ -21,7 +21,7 @@ public class SideEffectTest implements AllTestCases{
     }   
     
     static void testOnLocations(ISideEffectAnalysis sideEffect,SootMethod m){
-         Collection<Location> modLocs = sideEffect.getModHeapLocs(m);        
+         Collection<Location> modLocs = sideEffect.getModHeapLocs(m);
          Test.out.print("\nModification set: ");
          Test.printCollection(modLocs.iterator(),"\n");   
     	   
@@ -94,7 +94,7 @@ public class SideEffectTest implements AllTestCases{
     	Test.loadClasses(true);
     	
     	//SootUtils.doSparkPointsToAnalysis(Collections.EMPTY_MAP);
-    	Test.doFastSparkPointsToAnalysis(true);
+    	Test.doFastSparkPointsToAnalysis(true, false);
 
     	SideEffectTest.widthFirstDumpCallGraph(Scene.v().getCallGraph(), Scene.v().getMethod("<test.cases.SideEffect: void main(java.lang.String[])>"), 10000);
 

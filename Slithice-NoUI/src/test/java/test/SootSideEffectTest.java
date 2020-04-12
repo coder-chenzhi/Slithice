@@ -14,7 +14,7 @@ public class SootSideEffectTest implements AllTestCases {
         Test.loadClasses(true);
 
         //SootUtils.doSparkPointsToAnalysis(Collections.EMPTY_MAP);
-        Test.doFastSparkPointsToAnalysis();
+        Test.doFastSparkPointsToAnalysis(false, false);
 
         String methodSignature = SideEffect.MY_CASES[1];
         SootMethod method = Scene.v().getMethod(methodSignature);
