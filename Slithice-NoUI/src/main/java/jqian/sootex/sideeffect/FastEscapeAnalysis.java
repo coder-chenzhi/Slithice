@@ -328,13 +328,7 @@ public class FastEscapeAnalysis extends FreshAnalysis {
 					// but increases the safeness of our analysis.
 					// 2020.4.9 FIXME l.f = r may not escape
 					if (right instanceof Local) {
-						if (left instanceof StaticFieldRef) {
-							varConn.addEdge(Boolean.TRUE, right);
-						} else if (left instanceof InstanceFieldRef) {
-							varConn.addEdge(((InstanceFieldRef) left).getBase(), right);
-						} else if (left instanceof ArrayRef) {
-							varConn.addEdge(((ArrayRef) left).getBase(), right);
-						}
+						varConn.addEdge(Boolean.TRUE, right);
 					}
 				}
 				// others

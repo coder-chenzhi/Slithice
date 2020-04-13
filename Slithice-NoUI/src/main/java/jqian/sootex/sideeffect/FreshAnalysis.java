@@ -84,7 +84,6 @@ public class FreshAnalysis implements ILocalityQuery{
 		// build a constraint graph
 		MutableDirectedGraph<Object> varConn = initVarConnectionGraph(m);
 		Body body = m.retrieveActiveBody();
-		Value thisRef = null;
 
 		for(Unit u: body.getUnits()){
 			if(u instanceof ReturnStmt){			 
@@ -109,12 +108,7 @@ public class FreshAnalysis implements ILocalityQuery{
 					// Conceptually, formal parameters and this object are not fresh locals,
 					// as they are created at outside of current function
 					if(d instanceof IdentityStmt){
-						if (right instanceof ParameterRef) {
-							varConn.addEdge(Boolean.FALSE, left);
-						}
-						if (right instanceof ThisRef) {
-							thisRef = left;
-						}
+						varConn.addEdge(Boolean.FALSE, left);
 					}	
 					// 2. "l = new C", "l = constant"
 					// Obviously, the returned object of new expression are fresh
@@ -136,10 +130,7 @@ public class FreshAnalysis implements ILocalityQuery{
 					// 5. l = r.f
 					// TODO can we add connection between l and r, instead of connecting l and Boolean.FALSE?
 					else if(right instanceof InstanceFieldRef){
-						// non-this field access
-						if (((InstanceFieldRef) right).getBase() != thisRef) {
-							varConn.addEdge(Boolean.FALSE, left);
-						}
+						varConn.addEdge(Boolean.FALSE, left);
 					}
 					// 6. l = r[]
 					// TODO can we add connection between l and r, instead of connecting l and Boolean.FALSE?
